@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registration Success Page</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .container {
+      text-align: center;
+    }
+
+    h1 {
+      color: #28a745;
+    }
+
+    a {
+      color: #333;
+      font-weight: bold;
+      text-decoration: none;
+    }
+    a:hover {
+      color: #000;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>User Registration Successful</h1>
+  <a th:href="@{/login}">Click here to login</a>
+</div>
+</body>
+</html>
