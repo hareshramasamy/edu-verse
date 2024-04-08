@@ -1,10 +1,14 @@
 package com.csye6220.eduverse.service;
 
 import com.csye6220.eduverse.dao.CourseDAO;
+import com.csye6220.eduverse.dao.CourseOfferingDAO;
 import com.csye6220.eduverse.dao.InstructorDAO;
+import com.csye6220.eduverse.entity.CourseOffering;
 import com.csye6220.eduverse.entity.Instructor;
 import com.csye6220.eduverse.mapper.CourseMapper;
+import com.csye6220.eduverse.mapper.CourseOfferingMapper;
 import com.csye6220.eduverse.pojo.CourseDTO;
+import com.csye6220.eduverse.pojo.CourseOfferingDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,11 +25,17 @@ public class CourseOfferingServiceImpl implements CourseOfferingService {
 
     InstructorDAO instructorDAO;
 
+    CourseOfferingMapper courseOfferingMapper;
+
+    CourseOfferingDAO courseOfferingDAO;
+
     @Autowired
-    public CourseOfferingServiceImpl(CourseDAO courseDAO, CourseMapper courseMapper, InstructorDAO instructorDAO) {
+    public CourseOfferingServiceImpl(CourseDAO courseDAO, CourseMapper courseMapper, InstructorDAO instructorDAO, CourseOfferingMapper courseOfferingMapper, CourseOfferingDAO courseOfferingDAO) {
         this.courseDAO = courseDAO;
         this.courseMapper = courseMapper;
         this.instructorDAO = instructorDAO;
+        this.courseOfferingMapper = courseOfferingMapper;
+        this.courseOfferingDAO = courseOfferingDAO;
     }
 
     @Override
@@ -38,5 +48,11 @@ public class CourseOfferingServiceImpl implements CourseOfferingService {
                 .stream()
                 .map(course -> courseMapper.mapCoursesToDTO(course))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void createCourseOffering(CourseOfferingDTO courseOfferingDTO, String username) {
+        CourseOffering courseOffering = courseOfferingMapper.mapDTOToCourseOffering(courseOfferingDTO, username);
+        courseOfferingDAO.createCourseOffering(courseOffering);
     }
 }

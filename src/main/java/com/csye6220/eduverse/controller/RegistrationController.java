@@ -1,6 +1,5 @@
 package com.csye6220.eduverse.controller;
 
-import com.csye6220.eduverse.entity.User;
 import com.csye6220.eduverse.pojo.DepartmentDTO;
 import com.csye6220.eduverse.security.SecurityUtil;
 import com.csye6220.eduverse.service.DepartmentService;
@@ -61,15 +60,6 @@ public class RegistrationController {
         model.addAttribute("departmentList", departmentList);
         model.addAttribute("registrationDTO", new RegistrationDTO());
         return "register";
-    }
-
-    @PostMapping("/register/users")
-    @ResponseBody
-    public void createUsers(@RequestBody List<User> users) {
-        for(User user : users) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            userService.saveUser(user);
-        }
     }
 
     @PostMapping("/register")

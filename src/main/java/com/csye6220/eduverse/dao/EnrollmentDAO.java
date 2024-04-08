@@ -3,10 +3,11 @@ package com.csye6220.eduverse.dao;
 import com.csye6220.eduverse.entity.Enrollment;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Component
+@Repository
 public class EnrollmentDAO extends DAO {
 
     public List<Enrollment> getEnrollmentsByStudent(String username) {

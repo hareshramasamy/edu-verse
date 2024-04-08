@@ -1,4 +1,4 @@
-.layout-container {
+.courses-page-container {
     display: flex;
     height: 100vh;
     flex-wrap: wrap;
@@ -26,7 +26,7 @@
     width: 100%;
 }
 
-.main-content {
+.courses-container {
     flex: 20;
     padding: 36px 48px 48px 48px;
     margin-left: 54px;
@@ -123,13 +123,6 @@
     color: #c8102f;
 }
 
-.course-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 40px;
-    justify-content:left;
-}
-
 .empty-course-container {
     display: flex;
     flex-direction: column;
@@ -151,92 +144,34 @@
     font-weight: bold;
 }
 
-.course-card {
-    width: 250px;
-    min-width: 200px;
-    margin: 10px 20px 10px 0;
-    background-color: #f9f9f9;
-}
-
-.course-details {
-    text-decoration: none;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 300px;
-    cursor: pointer;
-}
-
-.course-details:hover {
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-}
-
-.course-body {
+.course-container {
     display: flex;
+    gap: 40px;
     flex-direction: column;
-    height: 100%;
-}
-
-.course-content {
-    padding: 10px 10px;
-}
-
-.course-img {
-    height: 150px;
-    background-color: #c8102f;
-    opacity: 0.3;
-}
-
-.course-content h3 {
-    margin-top: 0;
-    color: black;
-    font-size: medium;
-}
-
-.course-desc {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 50%;
-}
-
-.course-details p {
-    margin-bottom: 0;
-    color: grey;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.course-icon-list {
-    display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-evenly;
-    padding: 15px;
 }
 
-.course-body {
-    display:flex;
-    flex-direction: column;
+.course-container table {
+    width: 100%;
+    border-collapse: collapse;
 }
 
-.course-icon-item a i {
-    color: black;
+.course-container th, .course-container td {
+    padding: 10px;
+    text-align: center;
 }
 
-.course-icon-item a i:hover {
-    color: #c8102f
+.course-container th {
+    background-color: #f0f0f0;
 }
 
-.right-pane {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-    min-width: 100px;
+.course-container .star-icon {
+    text-align: center;
 }
 
-.todo-title {
-    margin-top: 20px;
+.course-container .star-icon i {
+    color: gold;
 }
+
 

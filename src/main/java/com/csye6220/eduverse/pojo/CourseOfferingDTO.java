@@ -21,4 +21,5 @@ public class CourseOfferingDTO {
     private String term;
     private String instructorName;
     private String departmentName;
+    private String role;
 }

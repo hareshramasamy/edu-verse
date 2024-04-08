@@ -6,8 +6,8 @@ import com.csye6220.eduverse.service.DashboardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 import java.util.Objects;
@@ -23,18 +23,16 @@ public class DashboardController {
     }
 
     @GetMapping("/")
-    public ModelAndView getDashboard() {
+    public String getDashboard(Model model) {
         Authentication authentication = SecurityUtil.getSessionUser();
-        ModelAndView modelAndView = new ModelAndView("dashboard");
-
         if(Objects.nonNull(authentication) && authentication.getAuthorities().stream().anyMatch(grantedAuthority -> "ROLE_STUDENT".equals(grantedAuthority.getAuthority()))) {
             List<CourseOfferingDTO> coursesEnrolled = dashboardService.getEnrollmentsByStudent(authentication.getName());
-            modelAndView.addObject("courses", coursesEnrolled);
+            model.addAttribute("courses", coursesEnrolled);
         } else if (Objects.nonNull(authentication) && authentication.getAuthorities().stream().anyMatch(grantedAuthority -> "ROLE_INSTRUCTOR".equals(grantedAuthority.getAuthority()))) {
             List<CourseOfferingDTO> coursesCreated = dashboardService.getCoursesByInstructor(authentication.getName());
-            modelAndView.addObject("courses", coursesCreated);
+            model.addAttribute("courses", coursesCreated);
         }
-        modelAndView.addObject("activeTab", "dashboard");
-        return modelAndView;
+        model.addAttribute("activeTab", "dashboard");
+        return "dashboard";
     }
 }

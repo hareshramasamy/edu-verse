@@ -3,10 +3,11 @@ package com.csye6220.eduverse.dao;
 import com.csye6220.eduverse.entity.Instructor;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.Objects;
 
-@Component
+@Repository
 public class InstructorDAO extends DAO {
     public void saveInstructor(Instructor instructor) {
         begin();

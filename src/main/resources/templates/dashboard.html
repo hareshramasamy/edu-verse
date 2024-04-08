@@ -27,13 +27,19 @@
     <div class="layout-container">
         <div class="sidebar">
             <div class="sidebar-nav">
-                <div class="logo">
+                <div class="logo" th:onclick="redirectTo('/')">
                     <img th:src="@{images/eduverse-logo-sm.png}" alt="logo">
                 </div>
                 <ul class="tabs">
-                    <li th:class="${activeTab == 'account' ? 'active' : ''}"><i class="fas fa-user" style="color: #c8102f;"></i><span>Account</span></li>
-                    <li th:class="${activeTab == 'dashboard' ? 'active' : ''}"><i class="fas fa-tachometer-alt" style="color: #c8102f;"></i><span>Dashboard</span></li>
-                    <li th:class="${activeTab == 'courses' ? 'active' : ''}"><i class="fas fa-book" style="color: #c8102f;"></i><span>Courses</span></li>
+                    <li th:class="${activeTab == 'account' ? 'active' : ''}" th:onclick="redirectTo('/account')">
+                        <i class="fas fa-user" style="color: #c8102f;"></i><span>Account</span>
+                    </li>
+                    <li th:class="${activeTab == 'dashboard' ? 'active' : ''}" th:onclick="redirectTo('/')">
+                        <i class="fas fa-tachometer-alt" style="color: #c8102f;"></i><span>Dashboard</span>
+                    </li>
+                    <li th:class="${activeTab == 'courses' ? 'active' : ''}" th:onclick="redirectTo('/courses')">
+                        <i class="fas fa-book" style="color: #c8102f;"></i><span>Courses</span>
+                    </li>
                 </ul>
             </div>
             <div class = "toggle-btn-wrapper" onclick="toggleSidebar()">
@@ -67,7 +73,7 @@
                         </div>
                         <div class = "course-desc">
                             <div class = "course-content">
-                                <h3 th:text="${course.courseTitle}"></h3>
+                                <h3 th:text="${course.courseCode + ' - ' + course.courseTitle}"></h3>
                                 <p th:text="${course.courseDescription}"></p>
                             </div>
                             <div class="course-icon-list">

@@ -5,13 +5,14 @@ import java.util.Objects;
 import com.csye6220.eduverse.entity.User;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author kai
  */
 
-@Component
+@Repository
 public class UserDAO extends DAO {
 
     public void saveUser(User user) {

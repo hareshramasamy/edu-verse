@@ -25,9 +25,9 @@
         <div class="mb-1">
             <label for="term" class="form-label">Choose Term:</label>
             <select class="form-select" id="term" th:field="*{term}">
-                <option th:value="'Summer'" th:text="'Summer'"></option>
-                <option th:value="'Fall'" th:text="'Fall'"></option>
-                <option th:value="'Spring'" th:text="'Spring'"></option>
+                <option th:value="'Summer 2024'" th:text="'Summer'"></option>
+                <option th:value="'Fall 2024'" th:text="'Fall'"></option>
+                <option th:value="'Spring 2025'" th:text="'Spring'"></option>
             </select>
         </div>
         <p th:if="${#fields.hasErrors('term')}" class="text-danger">

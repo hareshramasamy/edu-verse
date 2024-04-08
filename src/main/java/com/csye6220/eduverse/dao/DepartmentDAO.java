@@ -3,11 +3,12 @@ package com.csye6220.eduverse.dao;
 import com.csye6220.eduverse.entity.Department;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Objects;
 
-@Component
+@Repository
 public class DepartmentDAO extends DAO {
 
     public List<Department> getAllDepartments() {
