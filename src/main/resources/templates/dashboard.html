@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org"
+>
     <head>
         <meta charset="UTF-8">
         <title>
@@ -15,6 +17,10 @@
                 sidebar.classList.toggle('expanded');
                 mainContent.classList.toggle('main-expanded');
             }
+
+            function redirectTo(url) {
+                window.location.href = url;
+            }
         </script>
     </head>
     <body>
@@ -22,7 +28,7 @@
         <div class="sidebar">
             <div class="sidebar-nav">
                 <div class="logo">
-                    <img th:src="@{images/eduverse-logo-sm.png}" alt="cat">
+                    <img th:src="@{images/eduverse-logo-sm.png}" alt="logo">
                 </div>
                 <ul class="tabs">
                     <li th:class="${activeTab == 'account' ? 'active' : ''}"><i class="fas fa-user" style="color: #c8102f;"></i><span>Account</span></li>
@@ -39,23 +45,60 @@
         <div class="main-content">
             <h1>Dashboard</h1>
             <hr>
-            <div class="course-container">
-                <div class="course-card" th:each="course : ${courses}">
-                    <a class="course-details" th:href="@{'/courses/' + ${course.courseOfferingId}}">
-                        <img class = "course-img"/>
-                        <div class = "course-body">
+            <div class="empty-course-container" th:if="${#lists.isEmpty(courses)}">
+                <div>
+                    <img th:src="@{images/open-book.jpg}" alt="open-book">
+                </div>
+                <div sec:authorize="hasRole('ROLE_INSTRUCTOR')">
+                    <p>It looks like you don't have any courses yet.</p>
+                </div>
+                <div sec:authorize="hasRole('ROLE_INSTRUCTOR')">
+                    <a href="/courses/create" class="btn btn-danger">Create New Course</a>
+                </div>
+                <div sec:authorize="hasRole('ROLE_STUDENT')">
+                    <p>You are not enrolled in any courses at the moment.</p>
+                </div>
+            </div>
+            <div class="course-container" th:unless="${#lists.isEmpty(courses)}">
+                <div class="course-details" th:each="course : ${courses}" th:data-name="${course.courseOfferingId}" th:onclick="redirectTo('/courses/' + this.getAttribute('data-name'))">
+                    <div class = "course-body">
+                        <div class = "course-img">
+
+                        </div>
+                        <div class = "course-desc">
                             <div class = "course-content">
                                 <h3 th:text="${course.courseTitle}"></h3>
                                 <p th:text="${course.courseDescription}"></p>
                             </div>
-                            <ul class="course-icon-list">
-                                <li class = "course-icon-item"><i class="fas fa-bullhorn"></i></li>
-                                <li class = "course-icon-item"><i class="fas fa-tasks"></i></li>
-                                <li class = "course-icon-item"><i class="fas fa-file"></i></li>
-                            </ul>
+                            <div class="course-icon-list">
+                                <div class = "course-icon-item">
+                                    <a th:href="@{'/course/' + ${course.courseOfferingId} + '/announcements'}">
+                                        <i class="fas fa-bullhorn"></i>
+                                    </a>
+                                </div>
+                                <div class = "course-icon-item">
+                                    <a th:href="@{'/course/' + ${course.courseOfferingId} + '/assignments'}">
+                                        <i class="fas fa-tasks"></i>
+                                    </a>
+                                </div>
+                                <div class = "course-icon-item">
+                                    <a th:href="@{'/course/' + ${course.courseOfferingId} + '/files'}">
+                                        <i class="fas fa-file"></i>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
-                    </a>
+                    </div>
                 </div>
+            </div>
+        </div>
+        <div class = "right-pane">
+            <h3 class="todo-title">
+                To do
+            </h3>
+            <hr>
+            <div class = "todo-pane" sec:authorize="hasRole('ROLE_INSTRUCTOR')">
+                <a class="btn btn-danger" href="/courses/create">Create Course</a>
             </div>
         </div>
     </div>

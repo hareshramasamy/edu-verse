@@ -2,6 +2,7 @@ package com.csye6220.eduverse.controller;
 
 import com.csye6220.eduverse.entity.User;
 import com.csye6220.eduverse.pojo.DepartmentDTO;
+import com.csye6220.eduverse.security.SecurityUtil;
 import com.csye6220.eduverse.service.DepartmentService;
 import com.csye6220.eduverse.service.RegistrationService;
 import com.csye6220.eduverse.service.UserService;
@@ -9,6 +10,7 @@ import com.csye6220.eduverse.validator.RegistrationValidator;
 import com.csye6220.eduverse.pojo.RegistrationDTO;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,7 +18,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.WebDataBinder;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 public class RegistrationController {
@@ -47,6 +51,12 @@ public class RegistrationController {
 
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
+        Authentication authentication = SecurityUtil.getSessionUser();
+
+        if(Objects.nonNull(authentication) && authentication.getAuthorities().stream().anyMatch(grantedAuthority -> Arrays.asList("ROLE_STUDENT", "ROLE_INSTRUCTOR").contains(grantedAuthority.getAuthority()))) {
+            return "redirect:/";
+        }
+
         List<DepartmentDTO> departmentList = departmentService.getAllDepartments();
         model.addAttribute("departmentList", departmentList);
         model.addAttribute("registrationDTO", new RegistrationDTO());
