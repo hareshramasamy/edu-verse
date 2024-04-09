@@ -2,7 +2,6 @@ package com.csye6220.eduverse.dao;
 
 import com.csye6220.eduverse.entity.Department;
 import org.hibernate.query.Query;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,11 +14,11 @@ public class DepartmentDAO extends DAO {
         begin();
 
         String hql = "FROM Department e";
-        Query query = getSession().createQuery(hql);
+        Query<Department> query = getSession().createQuery(hql, Department.class);
 
         List<Department> departments = query.list();
         System.out.println(departments);
-        commit();
+        close();
         return departments;
     }
 
@@ -27,10 +26,10 @@ public class DepartmentDAO extends DAO {
         begin();
 
         String hql = "FROM Department d WHERE d.id = :id";
-        Query query = getSession().createQuery(hql);
+        Query<Department> query = getSession().createQuery(hql, Department.class);
         query.setParameter("id", id);
 
-        Department department = (Department) query.uniqueResult();
+        Department department = query.uniqueResult();
         System.out.println(Objects.nonNull(department)?department.getDepartmentName(): "Department is not found");
         close();
         return department;

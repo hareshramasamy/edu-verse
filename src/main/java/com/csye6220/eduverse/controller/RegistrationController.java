@@ -4,13 +4,11 @@ import com.csye6220.eduverse.pojo.DepartmentDTO;
 import com.csye6220.eduverse.security.SecurityUtil;
 import com.csye6220.eduverse.service.DepartmentService;
 import com.csye6220.eduverse.service.RegistrationService;
-import com.csye6220.eduverse.service.UserService;
 import com.csye6220.eduverse.validator.RegistrationValidator;
 import com.csye6220.eduverse.pojo.RegistrationDTO;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,10 +22,6 @@ import java.util.Objects;
 @Controller
 public class RegistrationController {
 
-    private final PasswordEncoder passwordEncoder;
-
-    private final UserService userService;
-
     private final DepartmentService departmentService;
 
     private final RegistrationService registrationService;
@@ -35,9 +29,7 @@ public class RegistrationController {
     private final RegistrationValidator registrationValidator;
 
     @Autowired
-    public RegistrationController(PasswordEncoder passwordEncoder, UserService userService, DepartmentService departmentService, RegistrationService registrationService, RegistrationValidator registrationValidator) {
-        this.passwordEncoder = passwordEncoder;
-        this.userService = userService;
+    public RegistrationController(DepartmentService departmentService, RegistrationService registrationService, RegistrationValidator registrationValidator) {
         this.departmentService = departmentService;
         this.registrationService = registrationService;
         this.registrationValidator = registrationValidator;

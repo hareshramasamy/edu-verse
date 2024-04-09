@@ -93,12 +93,12 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr th:each="course : ${courses}" th:data-name="${course.courseOfferingId}" th:onclick="redirectTo('/courses/' + this.getAttribute('data-name'))">
+                            <tr th:each="course : ${courses}">
                                 <td class="star-icon">
                                     <i class="fas fa-star"></i>
                                 </td>
                                 <td>
-                                    <p th:text="${course.courseCode + ' - ' + course.courseTitle}"></p>
+                                    <p class="course-title-link text-danger" th:text="${course.courseCode + ' - ' + course.courseTitle}" th:data-name="${course.courseOfferingId}" th:onclick="redirectTo('/courses/' + this.getAttribute('data-name'))"></p>
                                 </td>
                                 <td>
                                     <p th:text="${course.term}"></p>
@@ -115,10 +115,10 @@
     </div>
     <div class="accounts-menu">
         <div class="account-details">
-            <h3 class = "username">Welcome, User</h3>
+            <h3 class="username" th:text="${userFullName}"></h3>
             <a href="/logout" class = "btn btn-danger">Logout</a>
             <hr>
-            <a href="/account" class = "account-link text-danger" >Edit Profile</a>
+            <a href="/profile" class = "account-link text-danger" >Edit Profile</a>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

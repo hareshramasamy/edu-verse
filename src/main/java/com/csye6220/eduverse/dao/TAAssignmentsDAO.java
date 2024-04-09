@@ -10,12 +10,12 @@ public class TAAssignmentsDAO extends DAO {
     public List<TAAssignment> getTAAssignmentsByStudent(String username) {
         begin();
         String hql = "FROM TAAssignment t WHERE t.student.user.username = :username";
-        Query query = getSession().createQuery(hql);
+        Query<TAAssignment> query = getSession().createQuery(hql, TAAssignment.class);
         query.setParameter("username", username);
 
         List<TAAssignment> taAssignments = query.list();
         System.out.println(taAssignments);
-        commit();
+        close();
         return taAssignments;
     }
 }

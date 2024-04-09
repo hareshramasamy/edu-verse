@@ -41,7 +41,7 @@ public class AppSecurityConfig {
                 .authorizeHttpRequests(registry -> {
                         registry.requestMatchers("/home", "/register/**", "/css/**", "/js/**", "/images/**").permitAll();
                         registry.requestMatchers("/").hasAnyRole("INSTRUCTOR", "STUDENT");
-                        registry.requestMatchers("/courses", "/account").hasAnyRole("INSTRUCTOR", "STUDENT");
+                        registry.requestMatchers("/courses", "/profile").hasAnyRole("INSTRUCTOR", "STUDENT");
                         registry.requestMatchers("/courses/create").hasRole("INSTRUCTOR");
                         registry.requestMatchers("/course/*/announcements", "/course/*/assignments", "/course/*/files").hasAnyRole("INSTRUCTOR", "STUDENT");
                         registry.requestMatchers("/course/*/announcements/create", "/course/*/assignments/create", "/course/*/files/create").hasRole("INSTRUCTOR");

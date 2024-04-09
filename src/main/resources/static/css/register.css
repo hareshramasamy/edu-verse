@@ -41,7 +41,7 @@ input {
 }
 
 button {
-    background-color: #e74c3c; /* Red color */
+    background-color: #e74c3c;
     color: #fff;
     padding: 10px;
     border: none;
@@ -49,11 +49,11 @@ button {
     cursor: pointer;
     width: 100%;
     margin-top: 10px;
-    transition: background-color 0.3s ease; /* Smooth transition */
+    transition: background-color 0.3s ease;
 }
 
 button:hover {
-    background-color: #c0392b; /* Darker red on hover */
+    background-color: #c0392b;
 }
 
 .login-link {
@@ -61,7 +61,7 @@ button:hover {
     color: #c8102f;
     margin: auto;
     font-weight: bold;
-    transition: color 0.3s ease; /* Smooth transition */
+    transition: color 0.3s ease;
 }
 .login-para {
     margin-top: 5px;

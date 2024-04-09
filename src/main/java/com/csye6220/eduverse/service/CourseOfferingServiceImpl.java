@@ -2,6 +2,7 @@ package com.csye6220.eduverse.service;
 
 import com.csye6220.eduverse.dao.CourseDAO;
 import com.csye6220.eduverse.dao.CourseOfferingDAO;
+import com.csye6220.eduverse.dao.EnrollmentDAO;
 import com.csye6220.eduverse.dao.InstructorDAO;
 import com.csye6220.eduverse.entity.CourseOffering;
 import com.csye6220.eduverse.entity.Instructor;
@@ -28,14 +29,16 @@ public class CourseOfferingServiceImpl implements CourseOfferingService {
     CourseOfferingMapper courseOfferingMapper;
 
     CourseOfferingDAO courseOfferingDAO;
+    EnrollmentDAO enrollmentDAO;
 
     @Autowired
-    public CourseOfferingServiceImpl(CourseDAO courseDAO, CourseMapper courseMapper, InstructorDAO instructorDAO, CourseOfferingMapper courseOfferingMapper, CourseOfferingDAO courseOfferingDAO) {
+    public CourseOfferingServiceImpl(CourseDAO courseDAO, CourseMapper courseMapper, InstructorDAO instructorDAO, CourseOfferingMapper courseOfferingMapper, CourseOfferingDAO courseOfferingDAO, EnrollmentDAO enrollmentDAO) {
         this.courseDAO = courseDAO;
         this.courseMapper = courseMapper;
         this.instructorDAO = instructorDAO;
         this.courseOfferingMapper = courseOfferingMapper;
         this.courseOfferingDAO = courseOfferingDAO;
+        this.enrollmentDAO = enrollmentDAO;
     }
 
     @Override
@@ -54,5 +57,15 @@ public class CourseOfferingServiceImpl implements CourseOfferingService {
     public void createCourseOffering(CourseOfferingDTO courseOfferingDTO, String username) {
         CourseOffering courseOffering = courseOfferingMapper.mapDTOToCourseOffering(courseOfferingDTO, username);
         courseOfferingDAO.createCourseOffering(courseOffering);
+    }
+
+    @Override
+    public boolean checkCurrentUserEnrollment(Long courseOfferingId, String name) {
+        return enrollmentDAO.checkCurrentCourseEnrollment(courseOfferingId, name);
+    }
+
+    @Override
+    public CourseOffering getCourseOfferingById(Long courseOfferingId) {
+        return courseOfferingDAO.getCourseOfferingById(courseOfferingId);
     }
 }

@@ -10,5 +10,6 @@ public class StudentDAO extends DAO {
         begin();
         getSession().persist(student);
         commit();
+        close();
     }
 }

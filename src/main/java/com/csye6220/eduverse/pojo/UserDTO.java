@@ -1,23 +1,39 @@
 package com.csye6220.eduverse.pojo;
 
-public class InstructorDTO {
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
 
+public class UserDTO {
+
+    @NotEmpty(message = "Username is required")
+    private String username;
+
+    @NotEmpty(message = "First Name is required")
     private String firstName;
 
+    @NotEmpty(message = "Last Name is required")
     private String lastName;
 
+    @Email
+    @NotEmpty(message = "Email is required")
     private String email;
 
-    private Long departmentId;
-
-    public InstructorDTO() {
+    public UserDTO() {
     }
 
-    public InstructorDTO(String firstName, String lastName, String email, Long departmentId) {
+    public UserDTO(String username, String firstName, String lastName, String email) {
+        this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.departmentId = departmentId;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getFirstName() {
@@ -42,13 +58,5 @@ public class InstructorDTO {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public Long getDepartmentId() {
-        return departmentId;
-    }
-
-    public void setDepartmentId(Long departmentId) {
-        this.departmentId = departmentId;
     }
 }

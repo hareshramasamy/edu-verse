@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.csye6220.eduverse.entity.Course;
 import org.hibernate.query.Query;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -18,7 +17,7 @@ public class CourseDAO extends DAO {
         begin();
 
         String hql = "FROM Course c WHERE c.department.id = :departmentID";
-        Query query = getSession().createQuery(hql);
+        Query<Course> query = getSession().createQuery(hql, Course.class);
         query.setParameter("departmentID", departmentID);
 
         List<Course> courses = query.list();
@@ -31,12 +30,13 @@ public class CourseDAO extends DAO {
         begin();
 
         String hql = "FROM Course c WHERE c.id = :id";
-        Query query = getSession().createQuery(hql);
+        Query<Course> query = getSession().createQuery(hql, Course.class);
         query.setParameter("id", id);
 
-        Course course = (Course) query.uniqueResult();
+        Course course = query.uniqueResult();
         System.out.println(course);
         commit();
+        close();
         return course;
     }
 }
