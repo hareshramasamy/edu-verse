@@ -6,15 +6,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.JoinColumn;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Entity
-@Getter
-@Setter
-@AllArgsConstructor
 public class Announcement {
 
     @Id
@@ -39,4 +33,60 @@ public class Announcement {
         this.dateTime = LocalDateTime.now();
     }
 
+    public Announcement(Long id, String title, String content, LocalDateTime dateTime, Instructor instructor, CourseOffering courseOffering) {
+        this.id = id;
+        this.title = title;
+        this.content = content;
+        this.dateTime = dateTime;
+        this.instructor = instructor;
+        this.courseOffering = courseOffering;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public LocalDateTime getDateTime() {
+        return dateTime;
+    }
+
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
+    }
+
+    public Instructor getInstructor() {
+        return instructor;
+    }
+
+    public void setInstructor(Instructor instructor) {
+        this.instructor = instructor;
+    }
+
+    public CourseOffering getCourseOffering() {
+        return courseOffering;
+    }
+
+    public void setCourseOffering(CourseOffering courseOffering) {
+        this.courseOffering = courseOffering;
+    }
 }

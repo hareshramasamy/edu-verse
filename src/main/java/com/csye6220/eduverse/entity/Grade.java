@@ -1,16 +1,8 @@
 package com.csye6220.eduverse.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
 public class Grade {
 
     @Id
@@ -23,4 +15,36 @@ public class Grade {
     @OneToOne(cascade = CascadeType.ALL)
     private StudentAssignment studentAssignment;
 
+    public Grade() {
+    }
+
+    public Grade(Long id, double score, StudentAssignment studentAssignment) {
+        this.id = id;
+        this.score = score;
+        this.studentAssignment = studentAssignment;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public double getScore() {
+        return score;
+    }
+
+    public void setScore(double score) {
+        this.score = score;
+    }
+
+    public StudentAssignment getStudentAssignment() {
+        return studentAssignment;
+    }
+
+    public void setStudentAssignment(StudentAssignment studentAssignment) {
+        this.studentAssignment = studentAssignment;
+    }
 }

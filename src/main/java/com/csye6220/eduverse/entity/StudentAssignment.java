@@ -1,16 +1,8 @@
 package com.csye6220.eduverse.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Table(name = "student_assignment")
 public class StudentAssignment {
 
@@ -26,4 +18,36 @@ public class StudentAssignment {
     @JoinColumn(name = "assignment_id")
     private Assignment assignment;
 
+    public StudentAssignment() {
+    }
+
+    public StudentAssignment(Long id, Student student, Assignment assignment) {
+        this.id = id;
+        this.student = student;
+        this.assignment = assignment;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
+    }
+
+    public Assignment getAssignment() {
+        return assignment;
+    }
+
+    public void setAssignment(Assignment assignment) {
+        this.assignment = assignment;
+    }
 }

@@ -1,16 +1,8 @@
 package com.csye6220.eduverse.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
 public class Instructor {
 
     @Id
@@ -25,4 +17,36 @@ public class Instructor {
     @JoinColumn(name = "department_id")
     private Department department;
 
+    public Instructor() {
+    }
+
+    public Instructor(Long id, User user, Department department) {
+        this.id = id;
+        this.user = user;
+        this.department = department;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Department getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
+    }
 }

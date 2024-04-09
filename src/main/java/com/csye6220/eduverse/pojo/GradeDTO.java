@@ -1,18 +1,32 @@
 package com.csye6220.eduverse.pojo;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
 public class GradeDTO {
 
     private double score;
 
     private Long studentAssignmentId;
 
+    public GradeDTO() {
+    }
+
+    public GradeDTO(double score, Long studentAssignmentId) {
+        this.score = score;
+        this.studentAssignmentId = studentAssignmentId;
+    }
+
+    public double getScore() {
+        return score;
+    }
+
+    public void setScore(double score) {
+        this.score = score;
+    }
+
+    public Long getStudentAssignmentId() {
+        return studentAssignmentId;
+    }
+
+    public void setStudentAssignmentId(Long studentAssignmentId) {
+        this.studentAssignmentId = studentAssignmentId;
+    }
 }

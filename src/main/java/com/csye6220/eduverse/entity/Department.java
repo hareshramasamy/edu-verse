@@ -1,16 +1,8 @@
 package com.csye6220.eduverse.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
 public class Department {
 
     @Id
@@ -22,4 +14,37 @@ public class Department {
 
     @Column(name = "department_code")
     private String departmentCode;
+
+    public Department() {
+    }
+
+    public Department(Long id, String departmentName, String departmentCode) {
+        this.id = id;
+        this.departmentName = departmentName;
+        this.departmentCode = departmentCode;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
+    }
+
+    public String getDepartmentCode() {
+        return departmentCode;
+    }
+
+    public void setDepartmentCode(String departmentCode) {
+        this.departmentCode = departmentCode;
+    }
 }

@@ -4,9 +4,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Min;
-import lombok.Data;
 
-@Data
 public class RegistrationDTO {
 
     @NotEmpty(message = "First Name is required")
@@ -27,4 +25,82 @@ public class RegistrationDTO {
     private String username;
     @NotEmpty(message = "Role is required")
     private String role;
+
+    public RegistrationDTO() {
+    }
+
+    public RegistrationDTO(String firstName, String lastName, Long departmentId, String email, String password, String confirmPassword, String username, String role) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.departmentId = departmentId;
+        this.email = email;
+        this.password = password;
+        this.confirmPassword = confirmPassword;
+        this.username = username;
+        this.role = role;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public Long getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(Long departmentId) {
+        this.departmentId = departmentId;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 }
