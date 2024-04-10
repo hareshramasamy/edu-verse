@@ -1,6 +1,7 @@
 package com.csye6220.eduverse.controller;
 
 import com.csye6220.eduverse.entity.CourseOffering;
+import com.csye6220.eduverse.entity.Student;
 import com.csye6220.eduverse.pojo.*;
 import com.csye6220.eduverse.security.SecurityUtil;
 import com.csye6220.eduverse.service.CourseOfferingService;
@@ -55,7 +56,10 @@ public class CourseOfferingController {
         Authentication authentication = SecurityUtil.getSessionUser();
         if(Objects.nonNull(authentication)) {
             List<CourseDTO> courseDTOList = courseOfferingService.getAllCourses(authentication.getName());
+            UserDTO userDTO = userService.searchByUserName(authentication.getName());
             model.addAttribute("coursesList", courseDTOList);
+            model.addAttribute("userFullName", userDTO.getFirstName() + " " + userDTO.getLastName());
+            model.addAttribute("activeTab", "courses");
         }
         model.addAttribute("courseOffering", new CourseOfferingDTO());
         return "create-new-course";
@@ -75,17 +79,54 @@ public class CourseOfferingController {
         Authentication authentication = SecurityUtil.getSessionUser();
         if(Objects.nonNull(authentication)) {
             CourseOffering courseOffering = courseOfferingService.getCourseOfferingById(courseOfferingId);
+            CourseOfferingDTO courseOfferingDTO = courseOfferingService.mapCourseOfferingToDTO(courseOffering);
             if(courseOffering == null) {
                 return "error/404";
             }
-            boolean isEnrolled = courseOfferingService.checkCurrentUserEnrollment(courseOfferingId, authentication.getName());
-            if(!isEnrolled) {
+            boolean isEnrolled = false;
+            boolean isCourseInstructor = false;
+            if(authentication.getAuthorities().stream().anyMatch(grantedAuthority -> "ROLE_INSTRUCTOR".equals(grantedAuthority.getAuthority()))) {
+                isCourseInstructor = courseOfferingService.checkCurrentUserIsCourseInstructor(courseOffering.getInstructor().getId(), authentication.getName());
+            } else if(authentication.getAuthorities().stream().anyMatch(grantedAuthority -> "ROLE_STUDENT".equals(grantedAuthority.getAuthority()))) {
+                isEnrolled = courseOfferingService.checkCurrentUserEnrollment(courseOfferingId, authentication.getName());
+            }
+            if(!isEnrolled && !isCourseInstructor) {
                 return "error/403";
             }
             UserDTO userDTO = userService.searchByUserName(authentication.getName());
+            model.addAttribute("course", courseOfferingDTO);
             model.addAttribute("userFullName", userDTO.getFirstName() + " " + userDTO.getLastName());
             model.addAttribute("activeTab", "courses");
         }
         return "course-home";
+    }
+
+    @GetMapping("/courses/{courseOfferingId}/people")
+    public String getCoursePeoplePage(@PathVariable Long courseOfferingId, Model model) {
+        Authentication authentication = SecurityUtil.getSessionUser();
+        if(Objects.nonNull(authentication)) {
+            CourseOffering courseOffering = courseOfferingService.getCourseOfferingById(courseOfferingId);
+            CourseOfferingDTO courseOfferingDTO = courseOfferingService.mapCourseOfferingToDTO(courseOffering);
+            if(courseOffering == null) {
+                return "error/404";
+            }
+            boolean isEnrolled = false;
+            boolean isCourseInstructor = false;
+            if(authentication.getAuthorities().stream().anyMatch(grantedAuthority -> "ROLE_INSTRUCTOR".equals(grantedAuthority.getAuthority()))) {
+                isCourseInstructor = courseOfferingService.checkCurrentUserIsCourseInstructor(courseOffering.getInstructor().getId(), authentication.getName());
+            } else if(authentication.getAuthorities().stream().anyMatch(grantedAuthority -> "ROLE_STUDENT".equals(grantedAuthority.getAuthority()))) {
+                isEnrolled = courseOfferingService.checkCurrentUserEnrollment(courseOfferingId, authentication.getName());
+            }
+            if(!isEnrolled && !isCourseInstructor) {
+                return "error/403";
+            }
+            List<Student> enrolledStudents = courseOfferingService.getEnrolledStudents(courseOfferingId);
+            UserDTO userDTO = userService.searchByUserName(authentication.getName());
+            model.addAttribute("course", courseOfferingDTO);
+            model.addAttribute("students", enrolledStudents);
+            model.addAttribute("userFullName", userDTO.getFirstName() + " " + userDTO.getLastName());
+            model.addAttribute("activeTab", "courses");
+        }
+        return "course-people";
     }
 }

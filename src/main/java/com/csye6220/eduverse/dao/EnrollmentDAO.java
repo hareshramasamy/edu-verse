@@ -32,5 +32,16 @@ public class EnrollmentDAO extends DAO {
         close();
         return count != 0;
     }
+
+    public List<Enrollment> getEnrollmentsByCourseOfferingId(Long courseOfferingId) {
+        begin();
+        String hql = "FROM Enrollment e WHERE e.courseOffering.id = :courseOfferingId";
+        Query<Enrollment> query = getSession().createQuery(hql, Enrollment.class);
+        query.setParameter("courseOfferingId", courseOfferingId);
+        List<Enrollment> enrollments = query.list();
+        System.out.println(enrollments);
+        close();
+        return enrollments;
+    }
 }
 

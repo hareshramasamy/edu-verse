@@ -1,0 +1,79 @@
+.course-wrapper {
+    display: flex;
+}
+
+.course-sidebar {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px 20px 0 0;
+}
+
+.course-sidebar div p {
+    cursor: pointer;
+}
+
+.course-sidebar div p:hover {
+    text-decoration: underline;
+}
+
+.people-main-content {
+    flex: 6;
+    padding: 20px;
+}
+
+.empty-people-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 75%;
+    margin: auto;
+    padding: 80px;
+}
+
+.empty-people-container div img {
+    width: 150px;
+    height: 150px;
+    border-radius: 100px;
+}
+
+.empty-people-container div p {
+    font-size: x-large;
+    font-weight: bold;
+}
+
+.people-container {
+    display: flex;
+    gap: 40px;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-evenly;
+}
+
+.people-container table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.people-container th, .people-container td {
+    padding: 10px;
+    text-align: center;
+}
+
+.people-container tr:hover {
+    background-color: #f0f0f0;
+}
+
+.people-container th {
+    background-color: #f0f0f0;
+}
+
+.people-container .star-icon {
+    text-align: center;
+}
+
+.people-container .star-icon i {
+    color: gold;
+}

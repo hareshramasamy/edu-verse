@@ -1,0 +1,24 @@
+.course-wrapper {
+    display: flex;
+}
+
+.course-sidebar {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px 20px 0 0;
+}
+
+.course-sidebar div p {
+    cursor: pointer;
+}
+
+.course-sidebar div p:hover {
+    text-decoration: underline;
+}
+
+.course-main-content {
+    flex: 6;
+    padding: 20px;
+}

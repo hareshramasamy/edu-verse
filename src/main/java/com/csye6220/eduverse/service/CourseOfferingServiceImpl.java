@@ -1,15 +1,15 @@
 package com.csye6220.eduverse.service;
 
-import com.csye6220.eduverse.dao.CourseDAO;
-import com.csye6220.eduverse.dao.CourseOfferingDAO;
-import com.csye6220.eduverse.dao.EnrollmentDAO;
-import com.csye6220.eduverse.dao.InstructorDAO;
+import com.csye6220.eduverse.dao.*;
 import com.csye6220.eduverse.entity.CourseOffering;
+import com.csye6220.eduverse.entity.Enrollment;
 import com.csye6220.eduverse.entity.Instructor;
+import com.csye6220.eduverse.entity.Student;
 import com.csye6220.eduverse.mapper.CourseMapper;
 import com.csye6220.eduverse.mapper.CourseOfferingMapper;
 import com.csye6220.eduverse.pojo.CourseDTO;
 import com.csye6220.eduverse.pojo.CourseOfferingDTO;
+import com.csye6220.eduverse.pojo.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -67,5 +67,24 @@ public class CourseOfferingServiceImpl implements CourseOfferingService {
     @Override
     public CourseOffering getCourseOfferingById(Long courseOfferingId) {
         return courseOfferingDAO.getCourseOfferingById(courseOfferingId);
+    }
+
+    @Override
+    public boolean checkCurrentUserIsCourseInstructor(Long instructorId, String username) {
+        Instructor instructor =  instructorDAO.getInstructorByUsername(username);
+        return Objects.equals(instructor.getId(), instructorId);
+    }
+
+    @Override
+    public CourseOfferingDTO mapCourseOfferingToDTO(CourseOffering courseOffering) {
+        return courseOfferingMapper.mapCourseOfferingToDTO(courseOffering);
+    }
+
+    @Override
+    public List<Student> getEnrolledStudents(Long courseOfferingId) {
+        return enrollmentDAO.getEnrollmentsByCourseOfferingId(courseOfferingId)
+                .stream()
+                .map(Enrollment::getStudent)
+                .toList();
     }
 }

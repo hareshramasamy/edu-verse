@@ -64,6 +64,33 @@
           </div>
         </div>
       </div>
+      <div class = "main-content">
+        <h3 th:text = "${course.courseCode + ' - ' + course.courseTitle}"></h3>
+        <hr>
+        <div class = "course-wrapper">
+          <div class = "course-sidebar">
+            <div>
+              <p class="text-dark" th:text="Home" th:data-name="${course.courseOfferingId}" th:onclick="redirectTo('/courses/' + this.getAttribute('data-name'))"></p>
+            </div>
+            <div>
+              <p class="text-danger" th:text="Announcements" th:data-name="${course.courseOfferingId}" th:onclick="redirectTo('/courses/' + this.getAttribute('data-name') + '/announcements')"></p>
+            </div>
+            <div>
+              <p class="text-danger" th:text="Assignments" th:data-name="${course.courseOfferingId}" th:onclick="redirectTo('/courses/' + this.getAttribute('data-name') + '/assignments')"></p>
+            </div>
+            <div>
+              <p class="text-danger" th:text="Files" th:data-name="${course.courseOfferingId}" th:onclick="redirectTo('/courses/' + this.getAttribute('data-name') + '/files')"></p>
+            </div>
+            <div>
+              <p class="text-danger" th:text="People" th:data-name="${course.courseOfferingId}" th:onclick="redirectTo('/courses/' + this.getAttribute('data-name') + '/people')"></p>
+            </div>
+          </div>
+          <div class = "course-main-content">
+            <h3>Description</h3>
+            <p th:text = "${course.courseDescription}"></p>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="accounts-menu">
       <div class="account-details">
