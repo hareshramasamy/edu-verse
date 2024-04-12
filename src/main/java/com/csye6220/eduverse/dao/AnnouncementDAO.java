@@ -1,6 +1,7 @@
 package com.csye6220.eduverse.dao;
 
 import com.csye6220.eduverse.entity.Announcement;
+import com.csye6220.eduverse.entity.User;
 import com.csye6220.eduverse.pojo.AnnouncementDTO;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
@@ -41,5 +42,21 @@ public class AnnouncementDAO extends DAO {
         System.out.println(announcement);
         commit();
         return announcement;
+    }
+
+    public Announcement editAnnouncement(Announcement announcement) {
+        begin();
+        Announcement updatedAnnouncement = getSession().merge(announcement);
+        System.out.println(announcement);
+        commit();
+        close();
+        return announcement;
+    }
+
+    public void deleteAnnouncement(Announcement announcement) {
+        begin();
+        getSession().remove(announcement);
+        commit();
+        close();
     }
 }

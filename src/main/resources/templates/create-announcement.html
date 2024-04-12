@@ -67,11 +67,11 @@
         </div>
     </div>
     <div class="main-content">
-        <h2>Create new Course Offering</h2>
+        <h2>Create new Announcement</h2>
         <form method="post" role="form" th:action="@{'/courses/' + ${courseOfferingId} + '/announcements/create'}" th:object="${announcement}">
             <div class="mb-1">
                 <label for="title" class="form-label">Title:</label>
-                <input type="text" class="form-control" id="title" name="firstName" th:field="*{title}">
+                <input type="text" class="form-control" id="title" name="title" th:field="*{title}">
             </div>
             <p th:if="${#fields.hasErrors('title')}" class="text-danger">
                 Error: <span th:errors="*{title}"></span>
@@ -84,7 +84,7 @@
             <p th:if="${#fields.hasErrors('content')}" class="text-danger">
                 Error: <span th:errors="*{content}"></span>
             </p>
-            <button th:href="@{'/courses/' + ${courseOfferingId} + '/announcements/create'}" type="submit" class="btn btn-danger">Create Course</button>
+            <button th:href="@{'/courses/' + ${courseOfferingId} + '/announcements/create'}" type="submit" class="btn btn-danger">Submit</button>
         </form>
     </div>
 </div>

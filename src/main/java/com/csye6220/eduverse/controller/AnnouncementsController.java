@@ -56,6 +56,35 @@ public class AnnouncementsController {
         return "course-announcements";
     }
 
+    @GetMapping("/courses/{courseOfferingId}/announcements/create")
+    public String createAnnouncementPage(@PathVariable Long courseOfferingId, Model model) {
+        Authentication authentication = SecurityUtil.getSessionUser();
+        if(Objects.nonNull(authentication)) {
+            if(securityUtil.checkUserNotAuthorisedForCourse(courseOfferingId)) {
+                return "error/403";
+            }
+            UserDTO userDTO = userService.searchByUserName(authentication.getName());
+            model.addAttribute("userFullName", userDTO.getFirstName() + " " + userDTO.getLastName());
+            model.addAttribute("activeTab", "courses");
+        }
+        model.addAttribute("announcement", new AnnouncementDTO());
+        model.addAttribute("courseOfferingId", courseOfferingId);
+        return "create-announcement";
+    }
+
+    @PostMapping("/courses/{courseOfferingId}/announcements/create")
+    public String createAnnouncement(@PathVariable Long courseOfferingId, @Valid @ModelAttribute("announcement") AnnouncementDTO announcementDTO, BindingResult result, Model model) {
+        if(result.hasErrors()) {
+            model.addAttribute("announcement", announcementDTO);
+            return "create-announcement";
+        }
+        Authentication authentication = SecurityUtil.getSessionUser();
+        if(Objects.nonNull(authentication)) {
+            announcementService.createAnnouncement(announcementDTO, authentication.getName());
+        }
+        return "redirect:/courses/" + courseOfferingId + "/announcements";
+    }
+
     @GetMapping("/courses/{courseOfferingId}/announcements/{announcementId}")
     public String getAnnouncementById(@PathVariable Long courseOfferingId, @PathVariable Long announcementId, Model model){
         Authentication authentication = SecurityUtil.getSessionUser();
@@ -79,31 +108,62 @@ public class AnnouncementsController {
         return "single-course-announcement";
     }
 
-    @GetMapping("/courses/{courseOfferingId}/announcements/create")
-    public String createAnnouncementPage(@PathVariable Long courseOfferingId, Model model) {
+    @GetMapping("/courses/{courseOfferingId}/announcements/{announcementId}/edit")
+    public String editAnnouncementPage(@PathVariable Long courseOfferingId, @PathVariable Long announcementId, Model model) {
         Authentication authentication = SecurityUtil.getSessionUser();
         if(Objects.nonNull(authentication)) {
             if(securityUtil.checkUserNotAuthorisedForCourse(courseOfferingId)) {
                 return "error/403";
             }
+            AnnouncementDTO announcement = announcementService.getAnnouncementForEditPage(announcementId);
+            if(announcement == null) {
+                return "error/404";
+            }
             UserDTO userDTO = userService.searchByUserName(authentication.getName());
             model.addAttribute("userFullName", userDTO.getFirstName() + " " + userDTO.getLastName());
             model.addAttribute("activeTab", "courses");
+            model.addAttribute("announcement", announcement);
+            model.addAttribute("courseOfferingId", courseOfferingId);
         }
-        model.addAttribute("announcement", new AnnouncementDTO());
-        model.addAttribute("courseOfferingId", courseOfferingId);
-        return "create-announcement";
+        return "edit-announcement";
     }
 
-    @PostMapping("/courses/{courseOfferingId}/announcements/create")
-    public String createCourseOFfering(@PathVariable Long courseOfferingId, @Valid @ModelAttribute("announcement") AnnouncementDTO announcementDTO, BindingResult result, Model model) {
+    @PostMapping("/courses/{courseOfferingId}/announcements/{announcementId}/edit")
+    public String editAnnouncement(@PathVariable Long courseOfferingId, @PathVariable Long announcementId, @Valid @ModelAttribute("announcement") AnnouncementDTO announcementDTO, BindingResult result, Model model) {
         if(result.hasErrors()) {
             model.addAttribute("announcement", announcementDTO);
-            return "create-announcement";
+            return "edit-announcement";
         }
         Authentication authentication = SecurityUtil.getSessionUser();
         if(Objects.nonNull(authentication)) {
-            announcementService.createAnnouncement(announcementDTO, authentication.getName());
+            AnnouncementDTO updatedAnnouncementDTO = announcementService.editAnnouncementById(announcementDTO, announcementId, authentication.getName());
+            UserDTO userDTO = userService.searchByUserName(authentication.getName());
+            model.addAttribute("announcement", updatedAnnouncementDTO);
+            model.addAttribute("userFullName", userDTO.getFirstName() + " " + userDTO.getLastName());
+            model.addAttribute("course", courseOfferingService.getCourseOfferingDTOById(courseOfferingId));
+
+        }
+        model.addAttribute("activeTab", "courses");
+        return "redirect:/courses/" + courseOfferingId + "/announcements/" + announcementId;
+    }
+
+    @PostMapping("/courses/{courseOfferingId}/announcements/{announcementId}/delete")
+    public String deleteAnnouncement(@PathVariable Long courseOfferingId, @PathVariable Long announcementId, Model model) {
+        Authentication authentication = SecurityUtil.getSessionUser();
+        if (Objects.nonNull(authentication)) {
+            if(!courseOfferingService.checkCourseOfferingExists(courseOfferingId)) {
+                return "error/404";
+            }
+            if (securityUtil.checkUserNotAuthorisedForCourse(courseOfferingId)) {
+                return "error/403";
+            }
+            announcementService.deleteAnnouncementById(announcementId);
+            List<AnnouncementDTO> announcements = announcementService.getAnnouncementsByCourseOffering(courseOfferingId);
+            UserDTO userDTO = userService.searchByUserName(authentication.getName());
+            model.addAttribute("course", courseOfferingService.getCourseOfferingDTOById(courseOfferingId));
+            model.addAttribute("announcements", announcements);
+            model.addAttribute("userFullName", userDTO.getFirstName() + " " + userDTO.getLastName());
+            model.addAttribute("activeTab", "courses");
         }
         return "redirect:/courses/" + courseOfferingId + "/announcements";
     }

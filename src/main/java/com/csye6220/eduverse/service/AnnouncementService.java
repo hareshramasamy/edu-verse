@@ -9,4 +9,9 @@ public interface AnnouncementService {
     void createAnnouncement(AnnouncementDTO announcementDTO, String name);
 
     AnnouncementDTO getAnnouncementById(Long announcementId);
+    AnnouncementDTO getAnnouncementForEditPage(Long announcementid);
+
+    AnnouncementDTO editAnnouncementById(AnnouncementDTO announcementDTO, Long announcementId, String name);
+
+    void deleteAnnouncementById(Long announcementId);
 }
