@@ -1,6 +1,5 @@
 package com.csye6220.eduverse.controller;
 
-import com.csye6220.eduverse.entity.CourseOffering;
 import com.csye6220.eduverse.entity.Student;
 import com.csye6220.eduverse.pojo.*;
 import com.csye6220.eduverse.security.SecurityUtil;
@@ -26,25 +25,28 @@ public class CourseOfferingController {
     DashboardService dashboardService;
     UserService userService;
 
+    SecurityUtil securityUtil;
+
     @Autowired
-    public CourseOfferingController(CourseOfferingService courseOfferingService, DashboardService dashboardService, UserService userService) {
+    public CourseOfferingController(CourseOfferingService courseOfferingService, DashboardService dashboardService, UserService userService, SecurityUtil securityUtil) {
         this.courseOfferingService = courseOfferingService;
         this.dashboardService = dashboardService;
         this.userService = userService;
+        this.securityUtil = securityUtil;
     }
 
     @GetMapping("/courses")
     public String getCourses(Model model) throws Exception {
         Authentication authentication = SecurityUtil.getSessionUser();
-        if(Objects.nonNull(authentication) && authentication.getAuthorities().stream().anyMatch(grantedAuthority -> "ROLE_STUDENT".equals(grantedAuthority.getAuthority()))) {
-            List<CourseOfferingDTO> coursesEnrolled = dashboardService.getEnrollmentsByStudent(authentication.getName());
+        if(Objects.nonNull(authentication)) {
             UserDTO userDTO = userService.searchByUserName(authentication.getName());
-            model.addAttribute("courses", coursesEnrolled);
-            model.addAttribute("userFullName", userDTO.getFirstName() + " " + userDTO.getLastName());
-        } else if (Objects.nonNull(authentication) && authentication.getAuthorities().stream().anyMatch(grantedAuthority -> "ROLE_INSTRUCTOR".equals(grantedAuthority.getAuthority()))) {
-            UserDTO userDTO = userService.searchByUserName(authentication.getName());
-            List<CourseOfferingDTO> coursesCreated = dashboardService.getCoursesByInstructor(authentication.getName());
-            model.addAttribute("courses", coursesCreated);
+            if(SecurityUtil.isAuthorisedStudent(authentication)) {
+                List<CourseOfferingDTO> coursesEnrolled = dashboardService.getEnrollmentsByStudent(authentication.getName());
+                model.addAttribute("courses", coursesEnrolled);
+            } else if(SecurityUtil.isAuthorisedInstructor(authentication)) {
+                List<CourseOfferingDTO> coursesCreated = dashboardService.getCoursesByInstructor(authentication.getName());
+                model.addAttribute("courses", coursesCreated);
+            }
             model.addAttribute("userFullName", userDTO.getFirstName() + " " + userDTO.getLastName());
         }
         model.addAttribute("activeTab", "courses");
@@ -66,7 +68,7 @@ public class CourseOfferingController {
     }
 
     @PostMapping("/courses/create")
-    public String createCourseOFfering(@Valid @ModelAttribute("course") CourseOfferingDTO courseOfferingDTO, Model model) {
+    public String createCourseOFfering(@Valid @ModelAttribute("course") CourseOfferingDTO courseOfferingDTO) {
         Authentication authentication = SecurityUtil.getSessionUser();
         if(Objects.nonNull(authentication)) {
             courseOfferingService.createCourseOffering(courseOfferingDTO, authentication.getName());
@@ -78,23 +80,15 @@ public class CourseOfferingController {
     public String getCourseOffering(@PathVariable Long courseOfferingId, Model model) {
         Authentication authentication = SecurityUtil.getSessionUser();
         if(Objects.nonNull(authentication)) {
-            CourseOffering courseOffering = courseOfferingService.getCourseOfferingById(courseOfferingId);
-            CourseOfferingDTO courseOfferingDTO = courseOfferingService.mapCourseOfferingToDTO(courseOffering);
-            if(courseOffering == null) {
+            if(!courseOfferingService.checkCourseOfferingExists(courseOfferingId)) {
                 return "error/404";
             }
-            boolean isEnrolled = false;
-            boolean isCourseInstructor = false;
-            if(authentication.getAuthorities().stream().anyMatch(grantedAuthority -> "ROLE_INSTRUCTOR".equals(grantedAuthority.getAuthority()))) {
-                isCourseInstructor = courseOfferingService.checkCurrentUserIsCourseInstructor(courseOffering.getInstructor().getId(), authentication.getName());
-            } else if(authentication.getAuthorities().stream().anyMatch(grantedAuthority -> "ROLE_STUDENT".equals(grantedAuthority.getAuthority()))) {
-                isEnrolled = courseOfferingService.checkCurrentUserEnrollment(courseOfferingId, authentication.getName());
-            }
-            if(!isEnrolled && !isCourseInstructor) {
+            if(securityUtil.checkUserNotAuthorisedForCourse(courseOfferingId)) {
                 return "error/403";
             }
+
             UserDTO userDTO = userService.searchByUserName(authentication.getName());
-            model.addAttribute("course", courseOfferingDTO);
+            model.addAttribute("course", courseOfferingService.getCourseOfferingDTOById(courseOfferingId));
             model.addAttribute("userFullName", userDTO.getFirstName() + " " + userDTO.getLastName());
             model.addAttribute("activeTab", "courses");
         }
@@ -105,24 +99,15 @@ public class CourseOfferingController {
     public String getCoursePeoplePage(@PathVariable Long courseOfferingId, Model model) {
         Authentication authentication = SecurityUtil.getSessionUser();
         if(Objects.nonNull(authentication)) {
-            CourseOffering courseOffering = courseOfferingService.getCourseOfferingById(courseOfferingId);
-            CourseOfferingDTO courseOfferingDTO = courseOfferingService.mapCourseOfferingToDTO(courseOffering);
-            if(courseOffering == null) {
+            if(!courseOfferingService.checkCourseOfferingExists(courseOfferingId)) {
                 return "error/404";
             }
-            boolean isEnrolled = false;
-            boolean isCourseInstructor = false;
-            if(authentication.getAuthorities().stream().anyMatch(grantedAuthority -> "ROLE_INSTRUCTOR".equals(grantedAuthority.getAuthority()))) {
-                isCourseInstructor = courseOfferingService.checkCurrentUserIsCourseInstructor(courseOffering.getInstructor().getId(), authentication.getName());
-            } else if(authentication.getAuthorities().stream().anyMatch(grantedAuthority -> "ROLE_STUDENT".equals(grantedAuthority.getAuthority()))) {
-                isEnrolled = courseOfferingService.checkCurrentUserEnrollment(courseOfferingId, authentication.getName());
-            }
-            if(!isEnrolled && !isCourseInstructor) {
+            if(securityUtil.checkUserNotAuthorisedForCourse(courseOfferingId)) {
                 return "error/403";
             }
             List<Student> enrolledStudents = courseOfferingService.getEnrolledStudents(courseOfferingId);
             UserDTO userDTO = userService.searchByUserName(authentication.getName());
-            model.addAttribute("course", courseOfferingDTO);
+            model.addAttribute("course", courseOfferingService.getCourseOfferingDTOById(courseOfferingId));
             model.addAttribute("students", enrolledStudents);
             model.addAttribute("userFullName", userDTO.getFirstName() + " " + userDTO.getLastName());
             model.addAttribute("activeTab", "courses");

@@ -31,15 +31,15 @@ public class DashboardController {
     @GetMapping("/")
     public String getDashboard(Model model) {
         Authentication authentication = SecurityUtil.getSessionUser();
-        if(Objects.nonNull(authentication) && authentication.getAuthorities().stream().anyMatch(grantedAuthority -> "ROLE_STUDENT".equals(grantedAuthority.getAuthority()))) {
-            List<CourseOfferingDTO> coursesEnrolled = dashboardService.getEnrollmentsByStudent(authentication.getName());
+        if(Objects.nonNull(authentication)) {
             UserDTO userDTO = userService.searchByUserName(authentication.getName());
-            model.addAttribute("courses", coursesEnrolled);
-            model.addAttribute("userFullName", userDTO.getFirstName() + " " + userDTO.getLastName());
-        } else if (Objects.nonNull(authentication) && authentication.getAuthorities().stream().anyMatch(grantedAuthority -> "ROLE_INSTRUCTOR".equals(grantedAuthority.getAuthority()))) {
-            List<CourseOfferingDTO> coursesCreated = dashboardService.getCoursesByInstructor(authentication.getName());
-            UserDTO userDTO = userService.searchByUserName(authentication.getName());
-            model.addAttribute("courses", coursesCreated);
+            if(SecurityUtil.isAuthorisedStudent(authentication)) {
+                List<CourseOfferingDTO> coursesEnrolled = dashboardService.getEnrollmentsByStudent(authentication.getName());
+                model.addAttribute("courses", coursesEnrolled);
+            } else if(SecurityUtil.isAuthorisedInstructor(authentication)) {
+                List<CourseOfferingDTO> coursesCreated = dashboardService.getCoursesByInstructor(authentication.getName());
+                model.addAttribute("courses", coursesCreated);
+            }
             model.addAttribute("userFullName", userDTO.getFirstName() + " " + userDTO.getLastName());
         }
         model.addAttribute("activeTab", "dashboard");

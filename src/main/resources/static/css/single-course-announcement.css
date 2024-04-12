@@ -1,0 +1,52 @@
+.course-wrapper {
+    display: flex;
+}
+
+.course-sidebar {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px 20px 0 0;
+}
+
+.course-sidebar div p {
+    cursor: pointer;
+}
+
+.course-sidebar div p:hover {
+    text-decoration: underline;
+}
+
+.announcements-main-content {
+    flex: 6;
+    padding: 20px;
+}
+
+.announcement-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.announcement-author-date-container h3 {
+    margin-bottom: 0;
+}
+
+.announcement-author, .announcement-author-name {
+    font-weight: bold;
+    font-style: italic;
+}
+
+.announcement-author-name {
+    padding-left: 5px;
+}
+
+.announcement-posted-on-date {
+    padding-left: 5px;
+}
+
+.announcement-posted-on, .announcement-posted-on-date {
+    font-style: italic;
+    color: grey;
+}

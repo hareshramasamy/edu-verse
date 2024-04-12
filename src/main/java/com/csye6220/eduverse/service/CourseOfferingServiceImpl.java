@@ -87,4 +87,15 @@ public class CourseOfferingServiceImpl implements CourseOfferingService {
                 .map(Enrollment::getStudent)
                 .toList();
     }
+
+    @Override
+    public boolean checkCourseOfferingExists(Long courseOfferingId) {
+        CourseOffering courseOffering = getCourseOfferingById(courseOfferingId);
+        return Objects.nonNull(courseOffering);
+    }
+
+    @Override
+    public CourseOfferingDTO getCourseOfferingDTOById(Long courseOfferingId) {
+        return mapCourseOfferingToDTO(getCourseOfferingById(courseOfferingId));
+    }
 }

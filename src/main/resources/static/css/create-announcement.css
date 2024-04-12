@@ -1,0 +1,27 @@
+h2 {
+    text-align: center;
+    color: #333;
+}
+
+form {
+    width: 30%;
+}
+
+label {
+    display: block;
+    color: #333;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    min-width: 300px;
+}
+
+button {
+    margin-top: 10px;
+    width: 130px;
+    transition: background-color 0.3s ease;
+    min-width: 140px;
+}

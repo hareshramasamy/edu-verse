@@ -1,0 +1,96 @@
+.course-wrapper {
+    display: flex;
+}
+
+.course-sidebar {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px 20px 0 0;
+}
+
+.course-sidebar div p {
+    cursor: pointer;
+}
+
+.course-sidebar div p:hover {
+    text-decoration: underline;
+}
+
+.announcements-main-content {
+    flex: 6;
+    padding: 20px;
+    overflow: hidden;
+}
+
+.announcements-container {
+    overflow-x: hidden;
+}
+
+.announcements-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.empty-announcement-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 75%;
+    margin: auto;
+    padding: 80px;
+}
+
+.empty-announcement-container div img {
+    width: 150px;
+    height: 150px;
+    border-radius: 100px;
+}
+
+.empty-announcement-container div p {
+    font-size: large;
+    font-weight: bold;
+    text-align: center;
+}
+
+.announcement-content-para {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: grey;
+    margin: 0;
+}
+
+.announcement-content-flex-container {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    cursor: pointer;
+    padding: 20px 0;
+}
+
+.announcement-content-flex-container:hover {
+    background-color: #f0f0f0;
+}
+
+.announcement-content-container {
+    flex: 7;
+    overflow: hidden;
+}
+
+.announcement-date-container {
+    flex: 2;
+}
+
+.announcement-date-container p {
+    margin: 0;
+    text-align: right;
+    font-style: italic;
+}
+
+.announcements-main-content hr {
+    margin:0;
+}

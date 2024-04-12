@@ -57,11 +57,11 @@ public class RegistrationController {
     @PostMapping("/register")
     public String processRegistrationForm(@Valid @ModelAttribute("registrationDTO") RegistrationDTO registrationDTO, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            List<DepartmentDTO> departmentList = departmentService.getAllDepartments();
-            model.addAttribute("departmentList", departmentList);
-            model.addAttribute("registrationDTO",registrationDTO);
-            return "register";
-        }
+                List<DepartmentDTO> departmentList = departmentService.getAllDepartments();
+                model.addAttribute("departmentList", departmentList);
+                model.addAttribute("registrationDTO",registrationDTO);
+                return "register";
+            }
         registrationService.registerUser(registrationDTO);
         return "success-page";
     }

@@ -40,11 +40,8 @@ public class AppSecurityConfig {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(registry -> {
                         registry.requestMatchers("/home", "/register/**", "/css/**", "/js/**", "/images/**").permitAll();
-                        registry.requestMatchers("/").hasAnyRole("INSTRUCTOR", "STUDENT");
-                        registry.requestMatchers("/courses", "/profile").hasAnyRole("INSTRUCTOR", "STUDENT");
-                        registry.requestMatchers("/courses/create").hasRole("INSTRUCTOR");
-                        registry.requestMatchers("/course/*/announcements", "/course/*/assignments", "/course/*/files").hasAnyRole("INSTRUCTOR", "STUDENT");
-                        registry.requestMatchers("/course/*/announcements/create", "/course/*/assignments/create", "/course/*/files/create").hasRole("INSTRUCTOR");
+                        registry.requestMatchers("/","/courses", "/profile","/course/*/announcements", "/course/*/assignments", "/course/*/files").hasAnyRole("INSTRUCTOR", "STUDENT");
+                        registry.requestMatchers("/courses/create","/course/*/announcements/create", "/course/*/assignments/create", "/course/*/files/create").hasRole("INSTRUCTOR");
                         registry.anyRequest().authenticated();
                 })
                 .formLogin(httpSecurityFormLoginConfigurer -> {

@@ -22,4 +22,7 @@ public interface CourseOfferingService {
     CourseOfferingDTO mapCourseOfferingToDTO(CourseOffering courseOffering);
 
     List<Student> getEnrolledStudents(Long courseOfferingId);
+    boolean checkCourseOfferingExists(Long courseOfferingId);
+
+    CourseOfferingDTO getCourseOfferingDTOById(Long courseOfferingId);
 }
