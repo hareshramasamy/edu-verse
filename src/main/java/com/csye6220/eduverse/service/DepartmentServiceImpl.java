@@ -12,9 +12,9 @@ import java.util.stream.Collectors;
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
 
-    DepartmentDAO departmentDAO;
+    private final DepartmentDAO departmentDAO;
 
-    DepartmentMapper departmentMapper;
+    private final DepartmentMapper departmentMapper;
 
     @Autowired
     public DepartmentServiceImpl(DepartmentDAO departmentDAO, DepartmentMapper departmentMapper) {

@@ -18,27 +18,27 @@
     text-decoration: underline;
 }
 
-.announcements-main-content {
+.assignments-main-content {
     flex: 6;
     padding: 20px;
     overflow: hidden;
 }
 
-.announcements-container {
+.assignments-container {
     overflow-x: hidden;
 }
 
-.announcements-heading {
+.assignments-heading {
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-.announcements-heading div p i {
+.assignments-heading div p i {
     margin-right: 5px;
 }
 
-.empty-announcement-container {
+.empty-assignments-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -48,19 +48,19 @@
     padding: 80px;
 }
 
-.empty-announcement-container div img {
+.empty-assignments-container div img {
     width: 150px;
     height: 150px;
     border-radius: 100px;
 }
 
-.empty-announcement-container div p {
+.empty-assignments-container div p {
     font-size: large;
     font-weight: bold;
     text-align: center;
 }
 
-.announcement-content-para {
+.assignment-description-para {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -68,7 +68,7 @@
     margin: 0;
 }
 
-.announcement-content-flex-container {
+.assignment-content-flex-container {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
@@ -76,25 +76,25 @@
     padding: 20px 0;
 }
 
-.announcement-content-flex-container:hover {
+.assignment-content-flex-container:hover {
     background-color: #f0f0f0;
 }
 
-.announcement-content-container {
+.assignment-content-container {
     flex: 7;
     overflow: hidden;
 }
 
-.announcement-date-container {
+.assignment-date-container {
     flex: 2;
 }
 
-.announcement-date-container p {
+.assignment-date-container p {
     margin: 0;
     text-align: right;
     font-style: italic;
 }
 
-.announcements-main-content hr {
+.assignments-main-content hr {
     margin:0;
 }

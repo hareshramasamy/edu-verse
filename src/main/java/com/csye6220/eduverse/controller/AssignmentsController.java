@@ -1,9 +1,10 @@
 package com.csye6220.eduverse.controller;
 
-import com.csye6220.eduverse.pojo.AnnouncementDTO;
+import com.csye6220.eduverse.pojo.AssignmentDTO;
+import com.csye6220.eduverse.pojo.StudentAssignmentDTO;
 import com.csye6220.eduverse.pojo.UserDTO;
 import com.csye6220.eduverse.security.SecurityUtil;
-import com.csye6220.eduverse.service.AnnouncementService;
+import com.csye6220.eduverse.service.AssignmentsService;
 import com.csye6220.eduverse.service.CourseOfferingService;
 import com.csye6220.eduverse.service.UserService;
 import jakarta.validation.Valid;
@@ -21,23 +22,23 @@ import java.util.List;
 import java.util.Objects;
 
 @Controller
-public class AnnouncementsController {
+public class AssignmentsController {
 
     CourseOfferingService courseOfferingService;
-    AnnouncementService announcementService;
+    AssignmentsService assignmentsService;
     SecurityUtil securityUtil;
     UserService userService;
 
     @Autowired
-    public AnnouncementsController(CourseOfferingService courseOfferingService, SecurityUtil securityUtil, UserService userService, AnnouncementService announcementService) {
+    public AssignmentsController(CourseOfferingService courseOfferingService, AssignmentsService assignmentsService, SecurityUtil securityUtil, UserService userService) {
         this.courseOfferingService = courseOfferingService;
+        this.assignmentsService = assignmentsService;
         this.securityUtil = securityUtil;
         this.userService = userService;
-        this.announcementService = announcementService;
     }
 
-    @GetMapping("/courses/{courseOfferingId}/announcements")
-    public String getAnnouncementsForCourseOffering(@PathVariable Long courseOfferingId, Model model){
+    @GetMapping("/courses/{courseOfferingId}/assignments")
+    public String getAssignmentsForCourseOffering(@PathVariable Long courseOfferingId, Model model){
         Authentication authentication = SecurityUtil.getSessionUser();
         if(Objects.nonNull(authentication)) {
             if(!courseOfferingService.checkCourseOfferingExists(courseOfferingId)) {
@@ -46,18 +47,19 @@ public class AnnouncementsController {
             if(securityUtil.checkUserNotAuthorisedForCourse(courseOfferingId)) {
                 return "error/403";
             }
-            List<AnnouncementDTO> announcements = announcementService.getAnnouncementsByCourseOffering(courseOfferingId);
+            List<AssignmentDTO> assignments = assignmentsService.getAssignmentsByCourseOfferingId(courseOfferingId);
             UserDTO userDTO = userService.searchByUserName(authentication.getName());
             model.addAttribute("course", courseOfferingService.getCourseOfferingDTOById(courseOfferingId));
-            model.addAttribute("announcements", announcements);
+            model.addAttribute("assignments", assignments);
             model.addAttribute("userFullName", userDTO.getFirstName() + " " + userDTO.getLastName());
             model.addAttribute("activeTab", "courses");
         }
-        return "course-announcements";
+        return "course-assignments";
     }
 
-    @GetMapping("/courses/{courseOfferingId}/announcements/create")
-    public String createAnnouncementPage(@PathVariable Long courseOfferingId, Model model) {
+
+    @GetMapping("/courses/{courseOfferingId}/assignments/create")
+    public String createAssignmentPage(@PathVariable Long courseOfferingId, Model model) {
         Authentication authentication = SecurityUtil.getSessionUser();
         if(Objects.nonNull(authentication)) {
             if(!courseOfferingService.checkCourseOfferingExists(courseOfferingId)) {
@@ -71,16 +73,16 @@ public class AnnouncementsController {
             model.addAttribute("activeTab", "courses");
             model.addAttribute("course", courseOfferingService.getCourseOfferingDTOById(courseOfferingId));
         }
-        model.addAttribute("announcement", new AnnouncementDTO());
+        model.addAttribute("assignment", new AssignmentDTO());
         model.addAttribute("courseOfferingId", courseOfferingId);
-        return "create-announcement";
+        return "create-assignment";
     }
 
-    @PostMapping("/courses/{courseOfferingId}/announcements/create")
-    public String createAnnouncement(@PathVariable Long courseOfferingId, @Valid @ModelAttribute("announcement") AnnouncementDTO announcementDTO, BindingResult result, Model model) {
+    @PostMapping("/courses/{courseOfferingId}/assignments/create")
+    public String createAssignment(@PathVariable Long courseOfferingId, @Valid @ModelAttribute("assignment") AssignmentDTO assignmentDTO, BindingResult result, Model model) {
         Authentication authentication = SecurityUtil.getSessionUser();
         if(result.hasErrors()) {
-            model.addAttribute("announcement", announcementDTO);
+            model.addAttribute("assignment", assignmentDTO);
             model.addAttribute("courseOfferingId", courseOfferingId);
             if(Objects.nonNull(authentication)) {
                 UserDTO userDTO = userService.searchByUserName(authentication.getName());
@@ -88,16 +90,16 @@ public class AnnouncementsController {
             }
             model.addAttribute("activeTab", "courses");
             model.addAttribute("course", courseOfferingService.getCourseOfferingDTOById(courseOfferingId));
-            return "create-announcement";
+            return "create-assignment";
         }
         if(Objects.nonNull(authentication)) {
-            announcementService.createAnnouncement(announcementDTO, authentication.getName());
+            assignmentsService.createAssignment(assignmentDTO, authentication.getName());
         }
-        return "redirect:/courses/" + courseOfferingId + "/announcements";
+        return "redirect:/courses/" + courseOfferingId + "/assignments";
     }
 
-    @GetMapping("/courses/{courseOfferingId}/announcements/{announcementId}")
-    public String getAnnouncementById(@PathVariable Long courseOfferingId, @PathVariable Long announcementId, Model model){
+    @GetMapping("/courses/{courseOfferingId}/assignments/{assignmentId}")
+    public String getAssignmentsById(@PathVariable Long courseOfferingId, @PathVariable Long assignmentId, Model model){
         Authentication authentication = SecurityUtil.getSessionUser();
         if(Objects.nonNull(authentication)) {
             if(!courseOfferingService.checkCourseOfferingExists(courseOfferingId)) {
@@ -106,21 +108,21 @@ public class AnnouncementsController {
             if(securityUtil.checkUserNotAuthorisedForCourse(courseOfferingId)) {
                 return "error/403";
             }
-            AnnouncementDTO announcement = announcementService.getAnnouncementById(announcementId);
-            if(announcement == null) {
+            AssignmentDTO assignmentDTO = assignmentsService.getAssignmentById(assignmentId);
+            if(assignmentDTO == null) {
                 return "error/404";
             }
             UserDTO userDTO = userService.searchByUserName(authentication.getName());
             model.addAttribute("course", courseOfferingService.getCourseOfferingDTOById(courseOfferingId));
-            model.addAttribute("announcement", announcement);
+            model.addAttribute("assignment", assignmentDTO);
             model.addAttribute("userFullName", userDTO.getFirstName() + " " + userDTO.getLastName());
             model.addAttribute("activeTab", "courses");
         }
-        return "single-course-announcement";
+        return "single-course-assignment";
     }
 
-    @GetMapping("/courses/{courseOfferingId}/announcements/{announcementId}/edit")
-    public String editAnnouncementPage(@PathVariable Long courseOfferingId, @PathVariable Long announcementId, Model model) {
+    @GetMapping("/courses/{courseOfferingId}/assignments/{assignmentId}/edit")
+    public String editAssignmentsById(@PathVariable Long courseOfferingId, @PathVariable Long assignmentId, Model model) {
         Authentication authentication = SecurityUtil.getSessionUser();
         if(Objects.nonNull(authentication)) {
             if(!courseOfferingService.checkCourseOfferingExists(courseOfferingId)) {
@@ -129,26 +131,26 @@ public class AnnouncementsController {
             if(securityUtil.checkUserNotAuthorisedForCourse(courseOfferingId)) {
                 return "error/403";
             }
-            AnnouncementDTO announcement = announcementService.getAnnouncementForEditPage(announcementId);
-            if(announcement == null) {
+            AssignmentDTO assignment = assignmentsService.getAssignmentForEditPage(assignmentId);
+            if(assignment == null) {
                 return "error/404";
             }
             UserDTO userDTO = userService.searchByUserName(authentication.getName());
             model.addAttribute("course", courseOfferingService.getCourseOfferingDTOById(courseOfferingId));
             model.addAttribute("userFullName", userDTO.getFirstName() + " " + userDTO.getLastName());
             model.addAttribute("activeTab", "courses");
-            model.addAttribute("announcement", announcement);
+            model.addAttribute("assignment", assignment);
             model.addAttribute("courseOfferingId", courseOfferingId);
         }
-        return "edit-announcement";
+        return "edit-assignment";
     }
 
-    @PostMapping("/courses/{courseOfferingId}/announcements/{announcementId}/edit")
-    public String editAnnouncement(@PathVariable Long courseOfferingId, @PathVariable Long announcementId, @Valid @ModelAttribute("announcement") AnnouncementDTO announcementDTO, BindingResult result, Model model) {
+    @PostMapping("/courses/{courseOfferingId}/assignments/{assignmentId}/edit")
+    public String editAssignment(@PathVariable Long courseOfferingId, @PathVariable Long assignmentId, @Valid @ModelAttribute("assignment") AssignmentDTO assignmentDTO, BindingResult result, Model model) {
         Authentication authentication = SecurityUtil.getSessionUser();
         if(result.hasErrors()) {
-            announcementDTO.setId(announcementId);
-            model.addAttribute("announcement", announcementDTO);
+            assignmentDTO.setId(assignmentId);
+            model.addAttribute("assignment", assignmentDTO);
             model.addAttribute("courseOfferingId", courseOfferingId);
             if(Objects.nonNull(authentication)) {
                 UserDTO userDTO = userService.searchByUserName(authentication.getName());
@@ -156,22 +158,22 @@ public class AnnouncementsController {
             }
             model.addAttribute("activeTab", "courses");
             model.addAttribute("course", courseOfferingService.getCourseOfferingDTOById(courseOfferingId));
-            return "edit-announcement";
+            return "edit-assignment";
         }
         if(Objects.nonNull(authentication)) {
-            AnnouncementDTO updatedAnnouncementDTO = announcementService.editAnnouncementById(announcementDTO, announcementId, authentication.getName());
+            AssignmentDTO updatedAssignmentDTO = assignmentsService.editAssignmentById(assignmentDTO, assignmentId, authentication.getName());
             UserDTO userDTO = userService.searchByUserName(authentication.getName());
-            model.addAttribute("announcement", updatedAnnouncementDTO);
+            model.addAttribute("assignment", updatedAssignmentDTO);
             model.addAttribute("userFullName", userDTO.getFirstName() + " " + userDTO.getLastName());
             model.addAttribute("course", courseOfferingService.getCourseOfferingDTOById(courseOfferingId));
 
         }
         model.addAttribute("activeTab", "courses");
-        return "redirect:/courses/" + courseOfferingId + "/announcements/" + announcementId;
+        return "redirect:/courses/" + courseOfferingId + "/assignments/" + assignmentId;
     }
 
-    @GetMapping ("/courses/{courseOfferingId}/announcements/{announcementId}/delete")
-    public String deleteAnnouncement(@PathVariable Long courseOfferingId, @PathVariable Long announcementId, Model model) {
+    @GetMapping("/courses/{courseOfferingId}/assignments/{assignmentId}/delete")
+    public String deleteAssignment(@PathVariable Long courseOfferingId, @PathVariable Long assignmentId, Model model) {
         Authentication authentication = SecurityUtil.getSessionUser();
         if (Objects.nonNull(authentication)) {
             if(!courseOfferingService.checkCourseOfferingExists(courseOfferingId)) {
@@ -183,14 +185,39 @@ public class AnnouncementsController {
             if (securityUtil.checkUserNotAuthorisedForCourse(courseOfferingId)) {
                 return "error/403";
             }
-            announcementService.deleteAnnouncementById(announcementId);
-            List<AnnouncementDTO> announcements = announcementService.getAnnouncementsByCourseOffering(courseOfferingId);
+            assignmentsService.deleteAssignmentById(assignmentId);
+            List<AssignmentDTO> assignments = assignmentsService.getAssignmentsByCourseOfferingId(courseOfferingId);
             UserDTO userDTO = userService.searchByUserName(authentication.getName());
             model.addAttribute("course", courseOfferingService.getCourseOfferingDTOById(courseOfferingId));
-            model.addAttribute("announcements", announcements);
+            model.addAttribute("assignments", assignments);
             model.addAttribute("userFullName", userDTO.getFirstName() + " " + userDTO.getLastName());
             model.addAttribute("activeTab", "courses");
         }
-        return "redirect:/courses/" + courseOfferingId + "/announcements";
+        return "redirect:/courses/" + courseOfferingId + "/assignments";
+    }
+
+    @GetMapping("/courses/{courseOfferingId}/assignments/{assignmentId}/start-assignment")
+    public String startAssignmentById(@PathVariable Long courseOfferingId, @PathVariable Long assignmentId, Model model) {
+        Authentication authentication = SecurityUtil.getSessionUser();
+        if(Objects.nonNull(authentication)) {
+            if(!courseOfferingService.checkCourseOfferingExists(courseOfferingId)) {
+                return "error/404";
+            }
+            if(securityUtil.checkUserNotAuthorisedForCourse(courseOfferingId)) {
+                return "error/403";
+            }
+            AssignmentDTO assignment = assignmentsService.getAssignmentForEditPage(assignmentId);
+            if(assignment == null) {
+                return "error/404";
+            }
+            UserDTO userDTO = userService.searchByUserName(authentication.getName());
+            model.addAttribute("course", courseOfferingService.getCourseOfferingDTOById(courseOfferingId));
+            model.addAttribute("userFullName", userDTO.getFirstName() + " " + userDTO.getLastName());
+            model.addAttribute("activeTab", "courses");
+            model.addAttribute("assignment", assignment);
+            model.addAttribute("studentAssignment", new StudentAssignmentDTO());
+            model.addAttribute("courseOfferingId", courseOfferingId);
+        }
+        return "submit-assignment";
     }
 }

@@ -20,6 +20,7 @@ public class Announcement {
 
     private String content;
 
+    @Column(name = "date_time")
     private LocalDateTime dateTime;
 
     @ManyToOne

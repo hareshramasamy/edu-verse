@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class RegistrationServiceImpl implements RegistrationService {
 
-    RegistrationMapper registrationMapper;
+    private final RegistrationMapper registrationMapper;
 
     @Autowired
     public RegistrationServiceImpl(RegistrationMapper registrationMapper) {

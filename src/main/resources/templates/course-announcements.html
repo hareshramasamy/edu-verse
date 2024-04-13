@@ -92,7 +92,7 @@
                 <div class = "announcements-heading">
                     <h3>Announcements</h3>
                     <div sec:authorize="hasRole('ROLE_INSTRUCTOR')">
-                        <p th:data-name="${course.courseOfferingId}" th:onclick="redirectTo('/courses/' + this.getAttribute('data-name') + '/announcements/create')" class="btn btn-danger">Post Announcement</p>
+                        <p th:data-name="${course.courseOfferingId}" th:onclick="redirectTo('/courses/' + this.getAttribute('data-name') + '/announcements/create')" class="btn btn-danger"><i class="fas fa-plus"></i>Post Announcement</p>
                     </div>
                 </div>
                 <hr>

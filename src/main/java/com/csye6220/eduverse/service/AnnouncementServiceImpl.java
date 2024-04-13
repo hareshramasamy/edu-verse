@@ -13,9 +13,9 @@ import java.util.List;
 @Service
 public class AnnouncementServiceImpl implements AnnouncementService {
 
-    AnnouncementDAO announcementDAO;
+    private final AnnouncementDAO announcementDAO;
 
-    AnnouncementMapper announcementMapper;
+    private final AnnouncementMapper announcementMapper;
 
     @Autowired
     public AnnouncementServiceImpl(AnnouncementDAO announcementDAO, AnnouncementMapper announcementMapper) {
@@ -27,7 +27,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     public List<AnnouncementDTO> getAnnouncementsByCourseOffering(Long courseOfferingId) {
         return announcementDAO.getAnnouncementsByCourseOfferingId(courseOfferingId)
                 .stream()
-                .map(announcement -> announcementMapper.mapAnnouncementsToDTO(announcement))
+                .map(announcementMapper::mapAnnouncementsToDTO)
                 .toList();
     }
 

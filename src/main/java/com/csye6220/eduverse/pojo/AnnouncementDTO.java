@@ -8,10 +8,10 @@ public class AnnouncementDTO {
 
     private Long id;
 
-    @NotEmpty
+    @NotEmpty(message = "Announcement title is required")
     private String title;
 
-    @NotEmpty
+    @NotEmpty(message = "Announcement Content is required")
     private String content;
 
     private LocalDateTime dateTime;

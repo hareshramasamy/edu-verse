@@ -20,16 +20,16 @@ import java.util.stream.Collectors;
 @Service
 public class CourseOfferingServiceImpl implements CourseOfferingService {
 
-    CourseDAO courseDAO;
+    private final CourseDAO courseDAO;
 
-    CourseMapper courseMapper;
+    private final CourseMapper courseMapper;
 
-    InstructorDAO instructorDAO;
+    private final InstructorDAO instructorDAO;
 
-    CourseOfferingMapper courseOfferingMapper;
+    private final CourseOfferingMapper courseOfferingMapper;
 
-    CourseOfferingDAO courseOfferingDAO;
-    EnrollmentDAO enrollmentDAO;
+    private final CourseOfferingDAO courseOfferingDAO;
+    private final EnrollmentDAO enrollmentDAO;
 
     @Autowired
     public CourseOfferingServiceImpl(CourseDAO courseDAO, CourseMapper courseMapper, InstructorDAO instructorDAO, CourseOfferingMapper courseOfferingMapper, CourseOfferingDAO courseOfferingDAO, EnrollmentDAO enrollmentDAO) {

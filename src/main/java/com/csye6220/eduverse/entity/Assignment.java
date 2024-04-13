@@ -1,11 +1,8 @@
 package com.csye6220.eduverse.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.JoinColumn;
+import jakarta.persistence.*;
+
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -18,10 +15,11 @@ public class Assignment {
     private String name;
 
     private String description;
+    @Column(name = "start_date")
+    private LocalDateTime startDate;
 
-    private Date startDate;
-
-    private Date endDate;
+    @Column(name = "end_date")
+    private LocalDateTime endDate;
 
     @ManyToOne
     @JoinColumn(name = "course_offering_id")
@@ -30,7 +28,7 @@ public class Assignment {
     public Assignment() {
     }
 
-    public Assignment(Long id, String name, String description, Date startDate, Date endDate, CourseOffering courseOffering) {
+    public Assignment(Long id, String name, String description, LocalDateTime startDate, LocalDateTime endDate, CourseOffering courseOffering) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -63,19 +61,19 @@ public class Assignment {
         this.description = description;
     }
 
-    public Date getStartDate() {
+    public LocalDateTime getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(LocalDateTime startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public LocalDateTime getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
     }
 

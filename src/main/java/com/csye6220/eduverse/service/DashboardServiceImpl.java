@@ -17,13 +17,13 @@ import java.util.stream.Stream;
 @Service
 public class DashboardServiceImpl implements DashboardService {
 
-    EnrollmentDAO enrollmentDAO;
+    private final EnrollmentDAO enrollmentDAO;
 
-    CourseOfferingDAO courseOfferingDAO;
+    private final CourseOfferingDAO courseOfferingDAO;
 
-    CourseOfferingMapper courseOfferingMapper;
+    private final CourseOfferingMapper courseOfferingMapper;
 
-    TAAssignmentsDAO taAssignmentsDAO;
+    private final TAAssignmentsDAO taAssignmentsDAO;
 
     @Autowired
     public DashboardServiceImpl(EnrollmentDAO enrollmentDAO, CourseOfferingDAO courseOfferingDAO, CourseOfferingMapper courseOfferingMapper, TAAssignmentsDAO taAssignmentsDAO) {

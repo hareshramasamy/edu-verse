@@ -1,0 +1,44 @@
+.course-wrapper {
+    display: flex;
+}
+
+.course-sidebar {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px 20px 0 0;
+}
+
+.course-sidebar div p {
+    cursor: pointer;
+}
+
+.course-sidebar div p:hover {
+    text-decoration: underline;
+}
+
+.assignments-main-content {
+    flex: 6;
+    padding: 20px;
+}
+
+.assignment-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.assignment-author-date-container h3 {
+    margin-bottom: 0;
+}
+
+
+.assignment-due-on-date {
+    padding-left: 5px;
+}
+
+.assignment-due-on, .assignment-due-on-date {
+    font-style: italic;
+    color: grey;
+}
