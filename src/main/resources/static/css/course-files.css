@@ -1,0 +1,103 @@
+.course-wrapper {
+    display: flex;
+}
+
+.course-sidebar {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px 20px 0 0;
+}
+
+.course-sidebar div p {
+    cursor: pointer;
+}
+
+.course-sidebar div p:hover {
+    text-decoration: underline;
+}
+
+.files-main-content {
+    flex: 6;
+    padding: 20px;
+    overflow: hidden;
+}
+
+.files-container {
+    overflow-x: hidden;
+}
+
+.files-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.files-heading div p i {
+    margin-right: 5px;
+}
+
+.empty-file-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 75%;
+    margin: auto;
+    padding: 80px;
+}
+
+.empty-file-container div img {
+    width: 150px;
+    height: 150px;
+    border-radius: 100px;
+}
+
+.empty-file-container div p {
+    font-size: large;
+    font-weight: bold;
+    text-align: center;
+}
+
+.file-content-para {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: grey;
+    margin: 0;
+}
+
+.file-content-flex-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    padding: 20px 0;
+}
+
+.file-content-container {
+    overflow: hidden;
+}
+
+.file-content-container p {
+    color: #dc3545;
+    margin: 0;
+}
+
+.file-content-container p:hover {
+    text-decoration: underline;
+}
+
+.file-date-container span {
+    margin: 0;
+    font-style: italic;
+}
+
+.file-date-container .date-text {
+    margin-right: 5px;
+}
+
+.files-main-content hr {
+    margin:0;
+}

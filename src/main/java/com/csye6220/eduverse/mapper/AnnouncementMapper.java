@@ -32,7 +32,7 @@ public class AnnouncementMapper {
         announcementDTO.setId(announcement.getId());
         announcementDTO.setInstructorId(Objects.nonNull(announcement.getInstructor()) ? announcementDTO.getInstructorId() : null);
         announcementDTO.setInstructorName(Objects.nonNull(announcement.getInstructor()) ? announcement.getInstructor().getUser().getFirstName() + " " + announcement.getInstructor().getUser().getLastName() : "");
-        announcementDTO.setCourseOfferingId(Objects.nonNull(announcement.getCourseOffering()) ? announcementDTO.getCourseOfferingId() : null);
+        announcementDTO.setCourseOfferingId(Objects.nonNull(announcement.getCourseOffering()) ? announcement.getCourseOffering().getId() : null);
         announcementDTO.setContent(announcement.getContent());
         announcementDTO.setTitle(announcement.getTitle());
         announcementDTO.setDateTime(announcement.getDateTime());

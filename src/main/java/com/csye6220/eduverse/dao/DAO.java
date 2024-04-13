@@ -29,7 +29,7 @@ public abstract class DAO {
 
         MetadataSources sources = new MetadataSources(standardRegistry);
 
-        sources.addAnnotatedClasses(Announcement.class, Assignment.class, Course.class, CourseOffering.class, Department.class, Enrollment.class, Grade.class, Instructor.class, Student.class, StudentAssignment.class, TAAssignment.class, User.class);
+        sources.addAnnotatedClasses(Announcement.class, Assignment.class, Course.class, CourseOffering.class, Department.class, Enrollment.class, Grade.class, Instructor.class, Student.class, StudentAssignment.class, TAAssignment.class, User.class, FileData.class);
 
         sessionFactory = sources.buildMetadata().buildSessionFactory();
     }
