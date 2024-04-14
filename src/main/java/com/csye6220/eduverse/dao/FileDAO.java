@@ -37,7 +37,7 @@ public class FileDAO extends DAO {
 
         FileData file = query.uniqueResult();
         System.out.println(file);
-        commit();
+        close();
         return file;
     }
 }

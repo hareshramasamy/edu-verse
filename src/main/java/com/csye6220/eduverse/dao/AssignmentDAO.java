@@ -17,7 +17,7 @@ public class AssignmentDAO extends DAO {
 
         List<Assignment> assignments = query.list();
         System.out.println(assignments);
-        commit();
+        close();
         return assignments;
     }
 
@@ -37,7 +37,7 @@ public class AssignmentDAO extends DAO {
 
         Assignment assignment = query.uniqueResult();
         System.out.println(assignment);
-        commit();
+        close();
         return assignment;
     }
 

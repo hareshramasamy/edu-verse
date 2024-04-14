@@ -103,7 +103,9 @@
             <p th:data-name="${course.courseOfferingId}" th:data-name2 = "${assignment.id}" th:onclick="redirectTo('/courses/' + this.getAttribute('data-name') + '/assignments/' + this.getAttribute('data-name2') + '/delete')" class="btn btn-sm btn-danger"><i class="fas fa-trash-alt"></i></p>
           </div>
           <div sec:authorize="hasRole('ROLE_STUDENT')">
-            <p th:data-name="${course.courseOfferingId}" th:data-name2 = "${assignment.id}" th:onclick="redirectTo('/courses/' + this.getAttribute('data-name') + '/assignments/' + this.getAttribute('data-name2') + '/start-assignment')" class="btn btn-danger">Start Assignment</p>
+            <th:block th:if="${submissionStatus != 'submitted'}">
+              <p th:data-name="${course.courseOfferingId}" th:data-name2="${assignment.id}" th:onclick="redirectTo('/courses/' + this.getAttribute('data-name') + '/assignments/' + this.getAttribute('data-name2') + '/start-assignment')" class="btn btn-danger">Start Assignment</p>
+            </th:block>
           </div>
         </div>
         <hr>
@@ -111,6 +113,21 @@
           <p th:utext = "${assignment.description}"></p>
         </div>
       </div>
+      <th:block th:if="${submissionStatus == 'submitted'}">
+        <div class = "right-pane">
+          <h3>Submission</h3>
+          <hr>
+          <div>
+            <i class="fas fa-check"></i> Submitted!
+          </div>
+          <div class = "file-date-container">
+            <span th:text="${#temporals.format(studentAssignment.dateTime, 'dd MMM yyyy, HH:mm')}"></span>
+          </div>
+          <div class = "file-content-container">
+            <p th:data-name="${course.courseOfferingId}" th:data-name2 = "${studentAssignment.id}" th:onclick="redirectTo('/courses/' + this.getAttribute('data-name') + '/assignments/download/' + this.getAttribute('data-name2'))" th:text = "${studentAssignment.fileName}"></p>
+          </div>
+        </div>
+      </th:block>
     </div>
   </div>
 </div>

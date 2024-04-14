@@ -42,3 +42,30 @@
     font-style: italic;
     color: grey;
 }
+
+.right-pane {
+    padding: 20px;
+    flex: 2;
+}
+
+.right-pane h3 {
+    font-size: medium;
+    text-decoration: underline;
+}
+
+.right-pane i {
+    color: #28a745;
+}
+
+.right-pane .file-date-container {
+    color: grey;
+}
+
+.file-content-container p {
+    color: #dc3545;
+    margin: 0;
+}
+
+.file-content-container p:hover {
+    text-decoration: underline;
+}

@@ -16,7 +16,6 @@ public class CourseOfferingDAO extends DAO {
 
         List<CourseOffering> courseOfferings = query.list();
         System.out.println(courseOfferings);
-        commit();
         close();
         return courseOfferings;
     }
@@ -36,7 +35,6 @@ public class CourseOfferingDAO extends DAO {
 
         CourseOffering courseOffering = query.uniqueResult();
         System.out.println(courseOffering);
-        commit();
         close();
         return courseOffering;
     }

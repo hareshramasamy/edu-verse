@@ -1,11 +1,14 @@
 package com.csye6220.eduverse.controller;
 
+import com.csye6220.eduverse.entity.Student;
+import com.csye6220.eduverse.entity.StudentAssignment;
 import com.csye6220.eduverse.pojo.AssignmentDTO;
 import com.csye6220.eduverse.pojo.StudentAssignmentDTO;
 import com.csye6220.eduverse.pojo.UserDTO;
 import com.csye6220.eduverse.security.SecurityUtil;
 import com.csye6220.eduverse.service.AssignmentsService;
 import com.csye6220.eduverse.service.CourseOfferingService;
+import com.csye6220.eduverse.service.StudentAssignmentService;
 import com.csye6220.eduverse.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +31,15 @@ public class AssignmentsController {
     AssignmentsService assignmentsService;
     SecurityUtil securityUtil;
     UserService userService;
+    StudentAssignmentService studentAssignmentService;
 
     @Autowired
-    public AssignmentsController(CourseOfferingService courseOfferingService, AssignmentsService assignmentsService, SecurityUtil securityUtil, UserService userService) {
+    public AssignmentsController(CourseOfferingService courseOfferingService, AssignmentsService assignmentsService, SecurityUtil securityUtil, UserService userService, StudentAssignmentService studentAssignmentService) {
         this.courseOfferingService = courseOfferingService;
         this.assignmentsService = assignmentsService;
         this.securityUtil = securityUtil;
         this.userService = userService;
+        this.studentAssignmentService = studentAssignmentService;
     }
 
     @GetMapping("/courses/{courseOfferingId}/assignments")
@@ -113,6 +118,13 @@ public class AssignmentsController {
                 return "error/404";
             }
             UserDTO userDTO = userService.searchByUserName(authentication.getName());
+            StudentAssignmentDTO studentAssignmentDTO = studentAssignmentService.getStudentAssignmentByStudentAndAssignment(assignmentId, authentication.getName());
+            if(studentAssignmentDTO == null) {
+                model.addAttribute("submissionStatus", "not-started");
+            } else {
+                model.addAttribute("submissionStatus", "submitted");
+            }
+            model.addAttribute("studentAssignment", studentAssignmentDTO);
             model.addAttribute("course", courseOfferingService.getCourseOfferingDTOById(courseOfferingId));
             model.addAttribute("assignment", assignmentDTO);
             model.addAttribute("userFullName", userDTO.getFirstName() + " " + userDTO.getLastName());
@@ -194,30 +206,5 @@ public class AssignmentsController {
             model.addAttribute("activeTab", "courses");
         }
         return "redirect:/courses/" + courseOfferingId + "/assignments";
-    }
-
-    @GetMapping("/courses/{courseOfferingId}/assignments/{assignmentId}/start-assignment")
-    public String startAssignmentById(@PathVariable Long courseOfferingId, @PathVariable Long assignmentId, Model model) {
-        Authentication authentication = SecurityUtil.getSessionUser();
-        if(Objects.nonNull(authentication)) {
-            if(!courseOfferingService.checkCourseOfferingExists(courseOfferingId)) {
-                return "error/404";
-            }
-            if(securityUtil.checkUserNotAuthorisedForCourse(courseOfferingId)) {
-                return "error/403";
-            }
-            AssignmentDTO assignment = assignmentsService.getAssignmentForEditPage(assignmentId);
-            if(assignment == null) {
-                return "error/404";
-            }
-            UserDTO userDTO = userService.searchByUserName(authentication.getName());
-            model.addAttribute("course", courseOfferingService.getCourseOfferingDTOById(courseOfferingId));
-            model.addAttribute("userFullName", userDTO.getFirstName() + " " + userDTO.getLastName());
-            model.addAttribute("activeTab", "courses");
-            model.addAttribute("assignment", assignment);
-            model.addAttribute("studentAssignment", new StudentAssignmentDTO());
-            model.addAttribute("courseOfferingId", courseOfferingId);
-        }
-        return "submit-assignment";
     }
 }

@@ -22,7 +22,7 @@ public class CourseDAO extends DAO {
 
         List<Course> courses = query.list();
         System.out.println(courses);
-        commit();
+        close();
         return courses;
     }
 
@@ -35,7 +35,6 @@ public class CourseDAO extends DAO {
 
         Course course = query.uniqueResult();
         System.out.println(course);
-        commit();
         close();
         return course;
     }

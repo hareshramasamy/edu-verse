@@ -20,7 +20,7 @@ public class AnnouncementDAO extends DAO {
 
         List<Announcement> announcements = query.list();
         System.out.println(announcements);
-        commit();
+        close();
         return announcements;
     }
 
@@ -40,7 +40,7 @@ public class AnnouncementDAO extends DAO {
 
         Announcement announcement = query.uniqueResult();
         System.out.println(announcement);
-        commit();
+        close();
         return announcement;
     }
 
