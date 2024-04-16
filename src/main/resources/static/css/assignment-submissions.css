@@ -18,18 +18,18 @@
     text-decoration: underline;
 }
 
-.people-main-content {
+.submissions-main-content {
     flex: 6;
     padding: 20px;
 }
 
-.people-heading {
+.submissions-heading {
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-.empty-people-container {
+.empty-submissions-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -39,48 +39,58 @@
     padding: 80px;
 }
 
-.empty-people-container div img {
+.empty-submissions-container div img {
     width: 150px;
     height: 150px;
     border-radius: 100px;
 }
 
-.empty-people-container div p {
+.empty-submissions-container div p {
     font-size: large;
     font-weight: bold;
     text-align: center;
 }
 
-.people-container table {
+.submissions-container table {
     width: 100%;
     border-collapse: collapse;
 }
 
-.people-container th, .people-container td {
+.submissions-container th, .submissions-container td {
     padding: 10px;
     text-align: center;
 }
 
-.people-container td p {
+.submissions-container td p {
     margin: 0;
 }
 
-.people-container tr:hover {
+.submissions-container tr:hover {
     background-color: #f0f0f0;
 }
 
-.people-container th {
+.submissions-container th {
     background-color: #f0f0f0;
 }
 
-.people-container .star-icon {
-    text-align: center;
+.submission-download-link {
+    color: #dc3545;
+    cursor: pointer;
 }
 
-.people-container .star-icon i {
-    color: gold;
+.submission-download-link:hover {
+    text-decoration: underline;
 }
 
-.people-main-content hr {
+.grade-submission-link {
+    color: #dc3545;
+    cursor: pointer;
+}
+
+.grade-submission-link:hover {
+    text-decoration: underline;
+}
+
+.submissions-main-content hr {
     margin-top: 0;
 }

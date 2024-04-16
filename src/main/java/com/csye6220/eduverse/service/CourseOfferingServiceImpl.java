@@ -9,7 +9,6 @@ import com.csye6220.eduverse.mapper.CourseMapper;
 import com.csye6220.eduverse.mapper.CourseOfferingMapper;
 import com.csye6220.eduverse.pojo.CourseDTO;
 import com.csye6220.eduverse.pojo.CourseOfferingDTO;
-import com.csye6220.eduverse.pojo.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,15 +29,17 @@ public class CourseOfferingServiceImpl implements CourseOfferingService {
 
     private final CourseOfferingDAO courseOfferingDAO;
     private final EnrollmentDAO enrollmentDAO;
+    private final StudentDAO studentDAO;
 
     @Autowired
-    public CourseOfferingServiceImpl(CourseDAO courseDAO, CourseMapper courseMapper, InstructorDAO instructorDAO, CourseOfferingMapper courseOfferingMapper, CourseOfferingDAO courseOfferingDAO, EnrollmentDAO enrollmentDAO) {
+    public CourseOfferingServiceImpl(CourseDAO courseDAO, CourseMapper courseMapper, InstructorDAO instructorDAO, CourseOfferingMapper courseOfferingMapper, CourseOfferingDAO courseOfferingDAO, EnrollmentDAO enrollmentDAO, StudentDAO studentDAO) {
         this.courseDAO = courseDAO;
         this.courseMapper = courseMapper;
         this.instructorDAO = instructorDAO;
         this.courseOfferingMapper = courseOfferingMapper;
         this.courseOfferingDAO = courseOfferingDAO;
         this.enrollmentDAO = enrollmentDAO;
+        this.studentDAO = studentDAO;
     }
 
     @Override
@@ -97,5 +98,19 @@ public class CourseOfferingServiceImpl implements CourseOfferingService {
     @Override
     public CourseOfferingDTO getCourseOfferingDTOById(Long courseOfferingId) {
         return mapCourseOfferingToDTO(getCourseOfferingById(courseOfferingId));
+    }
+
+    @Override
+    public void enrollStudentsToCourse(Long courseOfferingId, List<String> emailList) {
+        CourseOffering courseOffering = courseOfferingDAO.getCourseOfferingById(courseOfferingId);
+        for(String email : emailList) {
+            Enrollment enrollment = new Enrollment();
+            enrollment.setCourseOffering(courseOffering);
+            Student student = studentDAO.getStudentByEmail(email);
+            if(Objects.nonNull(student)) {
+                enrollment.setStudent(student);
+                enrollmentDAO.createEnrollment(enrollment);
+            }
+        }
     }
 }

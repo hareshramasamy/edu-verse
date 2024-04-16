@@ -4,6 +4,8 @@ import com.csye6220.eduverse.entity.StudentAssignment;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class StudentAssignmentDAO extends DAO{
     public void saveStudentAssignment(StudentAssignment studentAssignment) {
@@ -40,5 +42,19 @@ public class StudentAssignmentDAO extends DAO{
 
         close();
         return studentAssignment;
+    }
+
+    public List<StudentAssignment> getStudentAssignmentsByAssignmentId(Long assignmentId) {
+        begin();
+
+        String hql = "FROM StudentAssignment s WHERE s.assignment.id = :assignmentId";
+        Query<StudentAssignment> query = getSession().createQuery(hql, StudentAssignment.class);
+        query.setParameter("assignmentId", assignmentId);
+        List<StudentAssignment> studentAssignment = query.list();
+        System.out.println(studentAssignment);
+
+        close();
+        return studentAssignment;
+
     }
 }

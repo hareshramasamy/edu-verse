@@ -11,17 +11,20 @@ public class Grade {
 
     private double score;
 
+    private String comment;
+
     @JoinColumn(name = "student_assignment_id")
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne()
     private StudentAssignment studentAssignment;
 
     public Grade() {
     }
 
-    public Grade(Long id, double score, StudentAssignment studentAssignment) {
+    public Grade(Long id, double score, StudentAssignment studentAssignment, String comment) {
         this.id = id;
         this.score = score;
         this.studentAssignment = studentAssignment;
+        this.comment = comment;
     }
 
     public Long getId() {
@@ -46,5 +49,13 @@ public class Grade {
 
     public void setStudentAssignment(StudentAssignment studentAssignment) {
         this.studentAssignment = studentAssignment;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 }

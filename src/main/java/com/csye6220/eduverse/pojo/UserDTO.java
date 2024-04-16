@@ -1,21 +1,21 @@
 package com.csye6220.eduverse.pojo;
 
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotBlank;
 
 public class UserDTO {
 
-    @NotEmpty(message = "Username is required")
+    @NotBlank(message = "Username is required")
     private String username;
 
-    @NotEmpty(message = "First Name is required")
+    @NotBlank(message = "First Name is required")
     private String firstName;
 
-    @NotEmpty(message = "Last Name is required")
+    @NotBlank(message = "Last Name is required")
     private String lastName;
 
     @Email
-    @NotEmpty(message = "Email is required")
+    @NotBlank(message = "Email is required")
     private String email;
 
     public UserDTO() {

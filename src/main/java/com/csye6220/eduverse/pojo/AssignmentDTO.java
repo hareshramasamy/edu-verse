@@ -1,23 +1,17 @@
 package com.csye6220.eduverse.pojo;
 
-import jakarta.validation.constraints.Future;
-import jakarta.validation.constraints.FutureOrPresent;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import org.springframework.cglib.core.Local;
+import jakarta.validation.constraints.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 public class AssignmentDTO {
 
     private Long id;
 
-    @NotEmpty(message = "Assignment Title is required")
+    @NotBlank(message = "Assignment Title is required")
     private String name;
 
-    @NotEmpty(message = "Assignment Description is required")
+    @NotBlank(message = "Assignment Description is required")
     private String description;
 
     @FutureOrPresent(message = "The start date and time must be greater than current date and time")

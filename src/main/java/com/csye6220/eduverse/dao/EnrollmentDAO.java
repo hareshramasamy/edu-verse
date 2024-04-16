@@ -1,6 +1,7 @@
 package com.csye6220.eduverse.dao;
 
 import com.csye6220.eduverse.entity.Enrollment;
+import com.csye6220.eduverse.entity.Student;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
@@ -42,6 +43,13 @@ public class EnrollmentDAO extends DAO {
         System.out.println(enrollments);
         close();
         return enrollments;
+    }
+
+    public void createEnrollment(Enrollment enrollment) {
+        begin();
+        getSession().persist(enrollment);
+        commit();
+        close();
     }
 }
 

@@ -42,6 +42,9 @@ public class StudentAssignmentMapper {
             studentAssignmentDTO.setId(studentAssignment.getId());
             studentAssignmentDTO.setAssignmentId(Objects.nonNull(studentAssignment.getAssignment()) ? studentAssignment.getAssignment().getId() : null);
             studentAssignmentDTO.setStudentId(Objects.nonNull(studentAssignment.getStudent()) ? studentAssignment.getStudent().getId() : null);
+            studentAssignmentDTO.setStudentName(Objects.nonNull(studentAssignment.getStudent()) ? studentAssignment.getStudent().getUser().getFirstName() + " " + studentAssignment.getStudent().getUser().getLastName(): "");
+            studentAssignmentDTO.setStudentEmail(Objects.nonNull(studentAssignment.getStudent()) ? studentAssignment.getStudent().getUser().getEmail() : "");
+            studentAssignmentDTO.setAssignmentName(Objects.nonNull(studentAssignment.getAssignment()) ? studentAssignment.getAssignment().getName() : "");
             studentAssignmentDTO.setDateTime(studentAssignment.getDateTime());
             studentAssignmentDTO.setFileName(studentAssignment.getFileName());
             studentAssignmentDTO.setFileType(studentAssignment.getFileType());

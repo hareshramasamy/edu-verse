@@ -64,6 +64,7 @@
 .file-content-container p {
     color: #dc3545;
     margin: 0;
+    cursor: pointer;
 }
 
 .file-content-container p:hover {

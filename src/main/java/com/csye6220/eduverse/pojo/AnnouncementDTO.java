@@ -1,6 +1,6 @@
 package com.csye6220.eduverse.pojo;
 
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotBlank;
 
 import java.time.LocalDateTime;
 
@@ -8,10 +8,10 @@ public class AnnouncementDTO {
 
     private Long id;
 
-    @NotEmpty(message = "Announcement title is required")
+    @NotBlank(message = "Announcement title is required")
     private String title;
 
-    @NotEmpty(message = "Announcement Content is required")
+    @NotBlank(message = "Announcement Content is required")
     private String content;
 
     private LocalDateTime dateTime;

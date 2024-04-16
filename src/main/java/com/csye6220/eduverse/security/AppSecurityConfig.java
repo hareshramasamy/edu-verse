@@ -40,9 +40,9 @@ public class AppSecurityConfig {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(registry -> {
                         registry.requestMatchers("/home", "/register/**", "/css/**", "/js/**", "/images/**").permitAll();
-                        registry.requestMatchers("/","/courses", "/profile","/courses/*/announcements", "/courses/*/assignments", "/courses/*/files").hasAnyRole("INSTRUCTOR", "STUDENT");
+                        registry.requestMatchers("/","/courses", "/profile","/courses/*/announcements", "/courses/*/assignments", "/courses/*/files", "/courses/*/people", "/courses/*/grades").hasAnyRole("INSTRUCTOR", "STUDENT");
                         registry.requestMatchers("/courses/*/announcements/*/start-assignment").hasRole("STUDENT");
-                        registry.requestMatchers("/courses/create","/courses/*/announcements/create", "/courses/*/assignments/create", "/courses/*/files/upload", "/courses/*/announcements/*/edit", "/courses/*/announcements/*/delete").hasRole("INSTRUCTOR");
+                        registry.requestMatchers("/courses/create","/courses/*/announcements/create", "/courses/*/assignments/create", "/courses/*/files/upload", "/courses/*/announcements/*/edit", "/courses/*/announcements/*/delete", "/courses/*/assignments/*/edit", "/courses/*/assignments/*/delete", "/courses/*/assignments/*/submissions", "/courses/*/grade/*").hasRole("INSTRUCTOR");
                         registry.anyRequest().authenticated();
                 })
                 .formLogin(httpSecurityFormLoginConfigurer -> {

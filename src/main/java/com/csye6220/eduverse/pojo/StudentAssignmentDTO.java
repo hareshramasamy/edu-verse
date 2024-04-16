@@ -18,10 +18,16 @@ public class StudentAssignmentDTO {
 
     private LocalDateTime dateTime;
 
+    private String studentName;
+
+    private String studentEmail;
+
+    private String assignmentName;
+
     public StudentAssignmentDTO() {
     }
 
-    public StudentAssignmentDTO(Long id, Long studentId, Long assignmentId, MultipartFile submissionData, String fileName, String fileType, LocalDateTime dateTime) {
+    public StudentAssignmentDTO(Long id, Long studentId, Long assignmentId, MultipartFile submissionData, String fileName, String fileType, LocalDateTime dateTime, String studentName, String studentEmail, String assignmentName) {
         this.id = id;
         this.studentId = studentId;
         this.assignmentId = assignmentId;
@@ -29,6 +35,9 @@ public class StudentAssignmentDTO {
         this.fileName = fileName;
         this.fileType = fileType;
         this.dateTime = dateTime;
+        this.studentName = studentName;
+        this.studentEmail = studentEmail;
+        this.assignmentName = assignmentName;
     }
 
     public Long getId() {
@@ -85,5 +94,29 @@ public class StudentAssignmentDTO {
 
     public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
+    }
+
+    public String getStudentName() {
+        return studentName;
+    }
+
+    public void setStudentName(String studentName) {
+        this.studentName = studentName;
+    }
+
+    public String getStudentEmail() {
+        return studentEmail;
+    }
+
+    public void setStudentEmail(String studentEmail) {
+        this.studentEmail = studentEmail;
+    }
+
+    public String getAssignmentName() {
+        return assignmentName;
+    }
+
+    public void setAssignmentName(String assignmentName) {
+        this.assignmentName = assignmentName;
     }
 }

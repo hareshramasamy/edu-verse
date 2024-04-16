@@ -25,4 +25,6 @@ public interface CourseOfferingService {
     boolean checkCourseOfferingExists(Long courseOfferingId);
 
     CourseOfferingDTO getCourseOfferingDTOById(Long courseOfferingId);
+
+    void enrollStudentsToCourse(Long courseOfferingId, List<String> emailList);
 }

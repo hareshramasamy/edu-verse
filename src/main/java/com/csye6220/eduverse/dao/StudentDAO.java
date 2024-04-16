@@ -27,4 +27,15 @@ public class StudentDAO extends DAO {
         close();
         return studentResult;
     }
+
+    public Student getStudentByEmail(String email) {
+        begin();
+        String hql = "FROM Student s WHERE s.user.email = :email";
+        Query<Student> query = getSession().createQuery(hql, Student.class);
+        query.setParameter("email", email);
+        Student studentResult = query.uniqueResult();
+        System.out.println(Objects.nonNull(studentResult) ? studentResult.getUser().getEmail(): "Student is not found");
+        close();
+        return studentResult;
+    }
 }
