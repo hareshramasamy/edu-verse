@@ -1,6 +1,5 @@
 package com.csye6220.eduverse.controller;
 
-import com.csye6220.eduverse.entity.User;
 import com.csye6220.eduverse.pojo.CourseOfferingDTO;
 import com.csye6220.eduverse.pojo.UserDTO;
 import com.csye6220.eduverse.security.SecurityUtil;

@@ -7,6 +7,8 @@ import com.csye6220.eduverse.pojo.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -43,5 +45,10 @@ public class UserServiceImpl implements UserService {
         user.setUsername(userDTO.getUsername());
         User updateUser = userDAO.updateUser(user);
         return userMapper.mapUserToDTO(updateUser);
+    }
+
+    @Override
+    public List<String> getEmailIdsByDepartment(Long courseOfferingId) {
+        return userDAO.getUsersByDepartment(courseOfferingId);
     }
 }

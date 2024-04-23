@@ -39,7 +39,7 @@ public class AppSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(registry -> {
-                        registry.requestMatchers("/home", "/register/**", "/css/**", "/js/**", "/images/**").permitAll();
+                        registry.requestMatchers("/register-users/**", "/register/**", "/css/**", "/js/**", "/images/**", "/courses/*/people/addAll").permitAll();
                         registry.requestMatchers("/","/courses", "/profile","/courses/*/announcements", "/courses/*/assignments", "/courses/*/files", "/courses/*/people", "/courses/*/grades").hasAnyRole("INSTRUCTOR", "STUDENT");
                         registry.requestMatchers("/courses/*/announcements/*/start-assignment").hasRole("STUDENT");
                         registry.requestMatchers("/courses/create","/courses/*/announcements/create", "/courses/*/assignments/create", "/courses/*/files/upload", "/courses/*/announcements/*/edit", "/courses/*/announcements/*/delete", "/courses/*/assignments/*/edit", "/courses/*/assignments/*/delete", "/courses/*/assignments/*/submissions", "/courses/*/grade/*").hasRole("INSTRUCTOR");

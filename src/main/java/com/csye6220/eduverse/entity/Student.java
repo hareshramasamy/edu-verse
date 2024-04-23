@@ -17,9 +17,6 @@ public class Student {
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     private List<Enrollment> enrollmentList;
 
-    @OneToMany(mappedBy = "student",  cascade = CascadeType.ALL)
-    private List<TAAssignment> taAssignmentList;
-
     @ManyToOne
     @JoinColumn(name = "department_id")
     private Department department;
@@ -27,11 +24,10 @@ public class Student {
     public Student() {
     }
 
-    public Student(Long id, User user, List<Enrollment> enrollmentList, List<TAAssignment> taAssignmentList, Department department) {
+    public Student(Long id, User user, List<Enrollment> enrollmentList, Department department) {
         this.id = id;
         this.user = user;
         this.enrollmentList = enrollmentList;
-        this.taAssignmentList = taAssignmentList;
         this.department = department;
     }
 
@@ -57,14 +53,6 @@ public class Student {
 
     public void setEnrollmentList(List<Enrollment> enrollmentList) {
         this.enrollmentList = enrollmentList;
-    }
-
-    public List<TAAssignment> getTaAssignmentList() {
-        return taAssignmentList;
-    }
-
-    public void setTaAssignmentList(List<TAAssignment> taAssignmentList) {
-        this.taAssignmentList = taAssignmentList;
     }
 
     public Department getDepartment() {

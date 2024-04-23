@@ -1,7 +1,5 @@
 package com.csye6220.eduverse.controller;
 
-import com.csye6220.eduverse.entity.Student;
-import com.csye6220.eduverse.entity.StudentAssignment;
 import com.csye6220.eduverse.pojo.AssignmentDTO;
 import com.csye6220.eduverse.pojo.StudentAssignmentDTO;
 import com.csye6220.eduverse.pojo.UserDTO;

@@ -11,10 +11,11 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.cfg.Configuration;
 
 public abstract class DAO {
 
-    private static SessionFactory sessionFactory;
+    private static final SessionFactory sessionFactory;
 
     static {
         StandardServiceRegistryBuilder registryBuilder = new StandardServiceRegistryBuilder();
@@ -23,17 +24,17 @@ public abstract class DAO {
                 .applySetting("hibernate.connection.url", "jdbc:mysql://localhost:3306/eduversedb")
                 .applySetting("hibernate.connection.username", "root")
                 .applySetting("hibernate.connection.password", "password")
-                .applySetting("hibernate.hbm2ddl.auto", "update");
+                .applySetting("hibernate.hbm2ddl.auto", "none");
 
         StandardServiceRegistry standardRegistry = registryBuilder.build();
 
         MetadataSources sources = new MetadataSources(standardRegistry);
 
-        sources.addAnnotatedClasses(Announcement.class, Assignment.class, Course.class, CourseOffering.class, Department.class, Enrollment.class, Grade.class, Instructor.class, Student.class, StudentAssignment.class, TAAssignment.class, User.class, FileData.class);
+        sources.addAnnotatedClasses(Announcement.class, Assignment.class, Course.class, CourseOffering.class, Department.class, Enrollment.class, Grade.class, Instructor.class, Student.class, StudentAssignment.class, User.class, FileData.class);
 
         sessionFactory = sources.buildMetadata().buildSessionFactory();
     }
-    private static final ThreadLocal sessionThread = new ThreadLocal();
+    private static final ThreadLocal<Session> sessionThread = new ThreadLocal<>();
 
     private static final Logger log = Logger.getAnonymousLogger();
 
@@ -41,7 +42,7 @@ public abstract class DAO {
     }
 
     public static Session getSession() {
-        Session session = (Session) DAO.sessionThread.get();
+        Session session = DAO.sessionThread.get();
 
         if (session == null) {
             session = sessionFactory.openSession();

@@ -2,6 +2,7 @@ package com.csye6220.eduverse.service;
 
 import com.csye6220.eduverse.mapper.RegistrationMapper;
 import com.csye6220.eduverse.pojo.RegistrationDTO;
+import com.csye6220.eduverse.pojo.TestRegistrationDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,15 @@ public class RegistrationServiceImpl implements RegistrationService {
             registrationMapper.mapRegistrationToStudent(registrationDTO);
         } else if("instructor".equals(registrationDTO.getRole())) {
             registrationMapper.mapRegistrationToInstructor(registrationDTO);
+        }
+    }
+
+    @Override
+    public void registerUserTest(TestRegistrationDTO registrationDTO) {
+        if("STUDENT".equals(registrationDTO.getRole())) {
+            registrationMapper.mapTestRegistrationToStudent(registrationDTO);
+        } else if("INSTRUCTOR".equals(registrationDTO.getRole())) {
+            registrationMapper.mapTestRegistrationToInstructor(registrationDTO);
         }
     }
 

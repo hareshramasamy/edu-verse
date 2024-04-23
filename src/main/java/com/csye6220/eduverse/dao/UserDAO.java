@@ -1,11 +1,10 @@
 package com.csye6220.eduverse.dao;
 
+import java.util.List;
 import java.util.Objects;
 
 import com.csye6220.eduverse.entity.User;
-import com.csye6220.eduverse.pojo.UserDTO;
 import org.hibernate.query.Query;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -56,6 +55,17 @@ public class UserDAO extends DAO {
         commit();
         close();
         return updatedUser;
+    }
+
+    public List<String> getUsersByDepartment(Long courseOfferingId) {
+        begin();
+        String hql = "SELECT s.user.email FROM Student s WHERE s.department.id = (SELECT co.course.department.id from CourseOffering co where co.id = :courseOfferingId)";
+        Query<String> query = getSession().createQuery(hql, String.class);
+        query.setParameter("courseOfferingId", courseOfferingId);
+        List<String> userResultList = query.list();
+        System.out.println(Objects.nonNull(userResultList)? userResultList : "User is not found");
+        close();
+        return userResultList;
     }
 }
 

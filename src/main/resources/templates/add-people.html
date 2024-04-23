@@ -4,25 +4,26 @@
 >
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>People</title>
+    <title>
+        Add People
+    </title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" th:href="@{/css/course-people.css}">
-    <link rel="stylesheet" th:href="@{/css/global.css}">
+    <link rel="stylesheet" th:href="@{/css/add-people.css}">
+    <link rel="stylesheet" th:href = "@{/css/global.css}">
     <script src="https://kit.fontawesome.com/7d29a41b0b.js" crossorigin="anonymous"></script>
     <script th:inline="javascript">
         function toggleSidebar() {
-            var sidebar = document.querySelector('.sidebar');
-            var coursesContainer = document.querySelector('.main-content');
-            var accountsMenu = document.querySelector('.accounts-menu');
+            let sidebar = document.querySelector('.sidebar');
+            let mainContent = document.querySelector('.main-content');
+            let accountsMenu = document.querySelector('.accounts-menu');
             sidebar.classList.toggle('expanded');
-            coursesContainer.classList.toggle('main-expanded');
+            mainContent.classList.toggle('main-expanded');
             accountsMenu.classList.toggle('sidebar-expanded');
         }
         function toggleAccountsMenu() {
-            var accountsMenu = document.querySelector('.accounts-menu');
-            var courseTab = document.querySelector('.tabs li:nth-child(3)');
-            var accountTab = document.querySelector('.tabs li:nth-child(1)');
+            let accountsMenu = document.querySelector('.accounts-menu');
+            let courseTab = document.querySelector('.tabs li:nth-child(3)');
+            let accountTab = document.querySelector('.tabs li:nth-child(1)');
 
             if (accountsMenu.classList.contains('expanded')) {
                 accountsMenu.classList.remove('expanded');
@@ -41,11 +42,11 @@
     </script>
 </head>
 <body>
-<div class = "layout-container">
+<div class="layout-container">
     <div class="sidebar">
         <div class="sidebar-nav">
             <div class="logo" th:onclick="redirectTo('/')">
-                <img th:src="@{../../images/eduverse-logo-sm.png}" alt="logo">
+                <img th:src="@{../../../images/eduverse-logo-sm.png}" alt="logo">
             </div>
             <ul class="tabs">
                 <li th:class="${activeTab == 'account' ? 'active' : ''}" th:onclick="toggleAccountsMenu()">
@@ -65,8 +66,8 @@
             </div>
         </div>
     </div>
-    <div class = "main-content">
-        <h3 th:text = "${course.courseCode + ' - ' + course.courseTitle}"></h3>
+    <div class="main-content">
+        <h3>Add People</h3>
         <hr>
         <div class = "course-wrapper">
             <div class = "course-sidebar">
@@ -90,53 +91,16 @@
                 </div>
             </div>
             <div class = "people-main-content">
-                <div class = "people-heading">
-                    <h3>People</h3>
-                    <div sec:authorize="hasRole('ROLE_INSTRUCTOR')">
-                        <p th:data-name="${course.courseOfferingId}" th:onclick="redirectTo('/courses/' + this.getAttribute('data-name') + '/people/add')" class="btn btn-danger">Add Students</p>
+                <form method="post" role="form" th:action="@{'/courses/' + ${courseOfferingId} + '/people/add'}" th:object="${person}">
+                    <div class="mb-1">
+                        <label for="email" class="form-label">Email:</label>
+                        <input type="email" class="form-control" id="email" name="email" th:field="*{email}">
                     </div>
-                </div>
-                <hr>
-                <div>
-                    <div class="empty-people-container" th:if="${#lists.isEmpty(students)}">
-                        <div>
-                            <img th:src="@{../../images/open-book.jpg}" alt="open-book">
-                        </div>
-                        <div sec:authorize="hasRole('ROLE_INSTRUCTOR')">
-                            <p>It looks like you haven't added any student to this course yet.</p>
-                        </div>
-                        <div sec:authorize="hasRole('ROLE_INSTRUCTOR')">
-                            <p th:data-name="${course.courseOfferingId}" th:onclick="redirectTo('/courses/' + this.getAttribute('data-name') + '/people/add')" class="btn btn-danger">Add Students</p>
-                        </div>
-                        <div sec:authorize="hasRole('ROLE_STUDENT')">
-                            <p>There are no students enrolled in this course.</p>
-                        </div>
-                    </div>
-                    <div class="people-container" th:unless="${#lists.isEmpty(students)}">
-                        <table>
-                            <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Role</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr th:each="student : ${students}">
-                                <td>
-                                    <p th:text="${student.user.firstName + ' ' + student.user.lastName}"></p>
-                                </td>
-                                <td>
-                                    <p th:text="${student.user.email}"></p>
-                                </td>
-                                <td>
-                                    <p th:text="Student"></p>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                    <p th:if="${#fields.hasErrors('email')}" class="text-danger">
+                        Error: <span th:errors="*{email}"></span>
+                    </p>
+                    <button th:href="@{'/courses/' + ${courseOfferingId} + '/people/add'}" type="submit" class="btn btn-danger">Add Student</button>
+                </form>
             </div>
         </div>
     </div>

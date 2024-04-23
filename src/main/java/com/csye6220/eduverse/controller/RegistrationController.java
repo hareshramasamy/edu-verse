@@ -1,6 +1,7 @@
 package com.csye6220.eduverse.controller;
 
 import com.csye6220.eduverse.pojo.DepartmentDTO;
+import com.csye6220.eduverse.pojo.TestRegistrationDTO;
 import com.csye6220.eduverse.security.SecurityUtil;
 import com.csye6220.eduverse.service.DepartmentService;
 import com.csye6220.eduverse.service.RegistrationService;
@@ -65,5 +66,23 @@ public class RegistrationController {
         registrationService.registerUser(registrationDTO);
         return "success-page";
     }
+
+    /**
+     * Method used for bulk user registration (For Postman testing purposes)
+     * @param registrationDTOList List of users to be registered
+     * @return response string containing all registered users usernames
+     */
+    @PostMapping("/register-users")
+    @ResponseBody
+    public String processRegistrationForm(@RequestBody List<TestRegistrationDTO> registrationDTOList) {
+        StringBuilder response = new StringBuilder();
+        for(TestRegistrationDTO registrationDTO : registrationDTOList) {
+            registrationService.registerUserTest(registrationDTO);
+            response.append("User registered successfully: ").append(registrationDTO.getUsername()).append("\n");
+        }
+        return response.toString();
+    }
 }
+
+
 
