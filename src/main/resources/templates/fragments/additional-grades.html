@@ -1,0 +1,11 @@
+<tr th:each="student : ${additionalStudents}">
+  <td th:text="${student.user.firstName + ' ' + student.user.lastName}"></td>
+  <td th:each="assignment : ${assignments}">
+    <span th:if="${studentGradesMap.get(student.id).containsKey(assignment.id)}"
+          th:text="${studentGradesMap.get(student.id).get(assignment.id).score}">
+    </span>
+    <span th:unless="${studentGradesMap.get(student.id).containsKey(assignment.id)}"
+          th:text="'-'">
+    </span>
+  </td>
+</tr>

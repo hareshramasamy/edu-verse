@@ -10,10 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -133,7 +130,7 @@ public class GradesController {
                 return "course-grades-student";
             } else if (authentication.getAuthorities().stream().anyMatch(grantedAuthority -> Objects.equals("ROLE_INSTRUCTOR", grantedAuthority.getAuthority()))) {
                 List<AssignmentDTO> assignments = assignmentsService.getAssignmentsByCourseOfferingId(courseOfferingId);
-                List<Student> enrolledStudents = courseOfferingService.getEnrolledStudents(courseOfferingId);
+                List<Student> enrolledStudents = courseOfferingService.getEnrolledStudents(courseOfferingId, 0);
                 Map<Long, Map<Long, GradeDTO>> studentGradesMap =  gradeService.retrieveStudentsAndGradesMap(enrolledStudents, assignments);
                 model.addAttribute("assignments", assignments);
                 model.addAttribute("students", enrolledStudents);
@@ -146,5 +143,16 @@ public class GradesController {
             }
         }
         return "error/403";
+    }
+
+    @GetMapping("/loadMoreGrades")
+    public String loadMoreStudents(@RequestParam int offset, @RequestParam Long courseOfferingId, Model model) {
+        List<AssignmentDTO> assignments = assignmentsService.getAssignmentsByCourseOfferingId(courseOfferingId);
+        List<Student> additionalStudents = courseOfferingService.getEnrolledStudents(courseOfferingId, offset);
+        Map<Long, Map<Long, GradeDTO>> studentGradesMap =  gradeService.retrieveStudentsAndGradesMap(additionalStudents, assignments);
+        model.addAttribute("assignments", assignments);
+        model.addAttribute("additionalStudents", additionalStudents);
+        model.addAttribute("studentGradesMap", studentGradesMap);
+        return "fragments/additional-grades";
     }
 }

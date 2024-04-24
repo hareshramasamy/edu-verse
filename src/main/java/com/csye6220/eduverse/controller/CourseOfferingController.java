@@ -6,12 +6,14 @@ import com.csye6220.eduverse.security.SecurityUtil;
 import com.csye6220.eduverse.service.CourseOfferingService;
 import com.csye6220.eduverse.service.DashboardService;
 import com.csye6220.eduverse.service.UserService;
+import com.csye6220.eduverse.validator.ExcelFileValidator;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Objects;
@@ -22,7 +24,6 @@ public class CourseOfferingController {
     DashboardService dashboardService;
     UserService userService;
     SecurityUtil securityUtil;
-
     @Autowired
     public CourseOfferingController(CourseOfferingService courseOfferingService, DashboardService dashboardService, UserService userService, SecurityUtil securityUtil) {
         this.courseOfferingService = courseOfferingService;
@@ -101,7 +102,7 @@ public class CourseOfferingController {
             if(securityUtil.checkUserNotAuthorisedForCourse(courseOfferingId)) {
                 return "error/403";
             }
-            List<Student> enrolledStudents = courseOfferingService.getEnrolledStudents(courseOfferingId);
+            List<Student> enrolledStudents = courseOfferingService.getEnrolledStudents(courseOfferingId, 0);
             UserDTO userDTO = userService.searchByUserName(authentication.getName());
             model.addAttribute("course", courseOfferingService.getCourseOfferingDTOById(courseOfferingId));
             model.addAttribute("students", enrolledStudents);
@@ -110,6 +111,14 @@ public class CourseOfferingController {
         }
         return "course-people";
     }
+
+    @GetMapping("/loadMorePeople")
+    public String loadMoreStudents(@RequestParam int offset, @RequestParam Long courseOfferingId, Model model) {
+        List<Student> additionalStudents = courseOfferingService.getEnrolledStudents(courseOfferingId, offset);
+        model.addAttribute("additionalStudents", additionalStudents);
+        return "fragments/additional-people";
+    }
+
 
     @GetMapping("/courses/{courseOfferingId}/people/add")
     public String addPeopleToCourse(@PathVariable Long courseOfferingId, Model model) {
@@ -124,6 +133,7 @@ public class CourseOfferingController {
             UserDTO userDTO = userService.searchByUserName(authentication.getName());
             model.addAttribute("course", courseOfferingService.getCourseOfferingDTOById(courseOfferingId));
             model.addAttribute("person", new PersonDTO());
+            model.addAttribute("file", new ExcelUploadValues());
             model.addAttribute("userFullName", userDTO.getFirstName() + " " + userDTO.getLastName());
             model.addAttribute("activeTab", "courses");
         }
@@ -135,6 +145,7 @@ public class CourseOfferingController {
         Authentication authentication = SecurityUtil.getSessionUser();
         if (result.hasErrors()) {
             model.addAttribute("person", personDTO);
+            model.addAttribute("file", new ExcelUploadValues());
             if (Objects.nonNull(authentication)) {
                 UserDTO userDTO = userService.searchByUserName(authentication.getName());
                 model.addAttribute("userFullName", userDTO.getFirstName() + " " + userDTO.getLastName());
@@ -159,5 +170,25 @@ public class CourseOfferingController {
             return "Failed";
         }
         return "Success";
+    }
+
+    @PostMapping("/courses/{courseOfferingId}/people/upload-excel")
+    public String addPeopleByUpload(@PathVariable Long courseOfferingId,  @Valid @ModelAttribute("file") ExcelUploadValues excelUploadValues, BindingResult result, Model model) {
+        Authentication authentication = SecurityUtil.getSessionUser();
+        if(Objects.nonNull(authentication)) {
+            courseOfferingService.uploadExcelFile(excelUploadValues, courseOfferingId, result);
+        }
+        if (result.hasErrors()) {
+            model.addAttribute("person", new PersonDTO());
+            model.addAttribute("file", excelUploadValues);
+            if (Objects.nonNull(authentication)) {
+                UserDTO userDTO = userService.searchByUserName(authentication.getName());
+                model.addAttribute("userFullName", userDTO.getFirstName() + " " + userDTO.getLastName());
+            }
+            model.addAttribute("activeTab", "courses");
+            model.addAttribute("course", courseOfferingService.getCourseOfferingDTOById(courseOfferingId));
+            return "add-people";
+        }
+        return "redirect:/courses/" + courseOfferingId + "/people";
     }
 }

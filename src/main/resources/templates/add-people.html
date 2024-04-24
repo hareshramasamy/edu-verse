@@ -91,16 +91,37 @@
                 </div>
             </div>
             <div class = "people-main-content">
-                <form method="post" role="form" th:action="@{'/courses/' + ${courseOfferingId} + '/people/add'}" th:object="${person}">
-                    <div class="mb-1">
-                        <label for="email" class="form-label">Email:</label>
-                        <input type="email" class="form-control" id="email" name="email" th:field="*{email}">
-                    </div>
-                    <p th:if="${#fields.hasErrors('email')}" class="text-danger">
-                        Error: <span th:errors="*{email}"></span>
-                    </p>
-                    <button th:href="@{'/courses/' + ${courseOfferingId} + '/people/add'}" type="submit" class="btn btn-danger">Add Student</button>
-                </form>
+                <div>
+                    <h1>
+                        Add Single Student Email Id
+                    </h1>
+                    <form method="post" role="form" th:action="@{'/courses/' + ${courseOfferingId} + '/people/add'}" th:object="${person}">
+                        <div class="mb-1">
+                            <label for="email" class="form-label">Email:</label>
+                            <input type="email" class="form-control" id="email" name="email" th:field="*{email}">
+                        </div>
+                        <p th:if="${#fields.hasErrors('email')}" class="text-danger">
+                            Error: <span th:errors="*{email}"></span>
+                        </p>
+                        <button th:href="@{'/courses/' + ${courseOfferingId} + '/people/add'}" type="submit" class="btn btn-danger">Add Student</button>
+                    </form>
+                </div>
+                <p>OR</p>
+                <div>
+                    <h1>
+                        Upload an excel file with email ids
+                    </h1>
+                    <form method="post" role="form" th:action="@{'/courses/' + ${courseOfferingId} + '/people/upload-excel'}" enctype="multipart/form-data" th:object="${file}">
+                        <div class="mb-1">
+                            <label for="file" class="form-label">Excel File:</label>
+                            <input type="file" class="form-control" id="file" name="file" th:field="*{data}" required>
+                        </div>
+                        <p th:if="${#fields.hasErrors('data')}" class="text-danger">
+                            Error: <span th:errors="*{data}"></span>
+                        </p>
+                        <button th:href="@{'/courses/' + ${courseOfferingId} + '/people/upload-excel'}" type="submit" class="btn btn-danger">Upload</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

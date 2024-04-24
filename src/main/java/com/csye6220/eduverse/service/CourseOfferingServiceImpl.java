@@ -9,10 +9,22 @@ import com.csye6220.eduverse.mapper.CourseMapper;
 import com.csye6220.eduverse.mapper.CourseOfferingMapper;
 import com.csye6220.eduverse.pojo.CourseDTO;
 import com.csye6220.eduverse.pojo.CourseOfferingDTO;
+import com.csye6220.eduverse.pojo.ExcelUploadValues;
+import com.csye6220.eduverse.validator.ExcelFileValidator;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.validation.BindingResult;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -30,9 +42,10 @@ public class CourseOfferingServiceImpl implements CourseOfferingService {
     private final CourseOfferingDAO courseOfferingDAO;
     private final EnrollmentDAO enrollmentDAO;
     private final StudentDAO studentDAO;
+    private final ExcelFileValidator excelFileValidator;
 
     @Autowired
-    public CourseOfferingServiceImpl(CourseDAO courseDAO, CourseMapper courseMapper, InstructorDAO instructorDAO, CourseOfferingMapper courseOfferingMapper, CourseOfferingDAO courseOfferingDAO, EnrollmentDAO enrollmentDAO, StudentDAO studentDAO) {
+    public CourseOfferingServiceImpl(CourseDAO courseDAO, CourseMapper courseMapper, InstructorDAO instructorDAO, CourseOfferingMapper courseOfferingMapper, CourseOfferingDAO courseOfferingDAO, EnrollmentDAO enrollmentDAO, StudentDAO studentDAO, ExcelFileValidator excelFileValidator) {
         this.courseDAO = courseDAO;
         this.courseMapper = courseMapper;
         this.instructorDAO = instructorDAO;
@@ -40,6 +53,7 @@ public class CourseOfferingServiceImpl implements CourseOfferingService {
         this.courseOfferingDAO = courseOfferingDAO;
         this.enrollmentDAO = enrollmentDAO;
         this.studentDAO = studentDAO;
+        this.excelFileValidator = excelFileValidator;
     }
 
     @Override
@@ -50,7 +64,7 @@ public class CourseOfferingServiceImpl implements CourseOfferingService {
         }
         return courseDAO.getCoursesByDepartment(instructor.getDepartment().getId())
                 .stream()
-                .map(course -> courseMapper.mapCoursesToDTO(course))
+                .map(courseMapper::mapCoursesToDTO)
                 .collect(Collectors.toList());
     }
 
@@ -82,8 +96,8 @@ public class CourseOfferingServiceImpl implements CourseOfferingService {
     }
 
     @Override
-    public List<Student> getEnrolledStudents(Long courseOfferingId) {
-        return enrollmentDAO.getEnrollmentsByCourseOfferingId(courseOfferingId)
+    public List<Student> getEnrolledStudents(Long courseOfferingId, int offset) {
+        return enrollmentDAO.getEnrollmentsByCourseOfferingId(courseOfferingId, offset)
                 .stream()
                 .map(Enrollment::getStudent)
                 .toList();
@@ -111,6 +125,41 @@ public class CourseOfferingServiceImpl implements CourseOfferingService {
                 enrollment.setStudent(student);
                 enrollmentDAO.createEnrollment(enrollment);
             }
+        }
+    }
+
+    @Override
+    public void uploadExcelFile(ExcelUploadValues excelUploadValues, Long courseOfferingId, BindingResult result) {
+        if("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet".equals(excelUploadValues.getData().getContentType())) {
+            try (InputStream inputStream = excelUploadValues.getData().getInputStream()) {
+                Workbook workbook = new XSSFWorkbook(inputStream);
+                List<String> emailList = new ArrayList<>();
+
+                Sheet sheet = workbook.getSheetAt(0);
+                Iterator<Row> rowIterator = sheet.iterator();
+
+                if (rowIterator.hasNext()) {
+                    rowIterator.next();
+                }
+
+                while (rowIterator.hasNext()) {
+                    Row row = rowIterator.next();
+                    Cell cell = row.getCell(0);
+
+                    if (cell != null) {
+                        String email = cell.getStringCellValue();
+                        emailList.add(email.trim());
+                    }
+                }
+
+                excelUploadValues.setEmailList(emailList);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        excelFileValidator.validate(excelUploadValues, result);
+        if(!result.hasErrors()) {
+            this.enrollStudentsToCourse(courseOfferingId, excelUploadValues.getEmailList());
         }
     }
 }

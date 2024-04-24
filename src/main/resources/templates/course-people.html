@@ -10,6 +10,7 @@
     <link rel="stylesheet" th:href="@{/css/course-people.css}">
     <link rel="stylesheet" th:href="@{/css/global.css}">
     <script src="https://kit.fontawesome.com/7d29a41b0b.js" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script th:inline="javascript">
         function toggleSidebar() {
             var sidebar = document.querySelector('.sidebar');
@@ -38,6 +39,51 @@
         function redirectTo(url) {
             window.location.href = url;
         }
+
+        function getCourseOfferingIdFromURL() {
+            var pathArray = window.location.pathname.split('/');
+            return pathArray[2];
+        }
+
+        var isLoading = false;
+        var currentOffset = 20;
+        var courseOfferingId = getCourseOfferingIdFromURL();
+
+        function loadMorePeople() {
+            if (!isLoading) {
+                isLoading = true;
+                $.ajax({
+                    url: '/loadMorePeople',
+                    type: 'GET',
+                    data: {
+                        courseOfferingId: courseOfferingId,
+                        offset: currentOffset
+                    },
+                    success: function(response) {
+                        $('#peopleContainer tbody').append(response);
+                        isLoading = false;
+                        currentOffset += 20;
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error when loading more people:", error);
+                        isLoading = false;
+                    }
+                });
+            }
+        }
+
+        $(window).scroll(function() {
+            var scrollBottom = $(document).height() - $(window).scrollTop() - $(window).height();
+            var threshold = 20;
+            if (scrollBottom < threshold) {
+                loadMorePeople();
+            }
+        });
+
+        $(document).ready(function() {
+            loadMorePeople();
+        });
+
     </script>
 </head>
 <body>
@@ -112,7 +158,7 @@
                             <p>There are no students enrolled in this course.</p>
                         </div>
                     </div>
-                    <div class="people-container" th:unless="${#lists.isEmpty(students)}">
+                    <div id = "peopleContainer" class="people-container" th:unless="${#lists.isEmpty(students)}">
                         <table>
                             <thead>
                             <tr>

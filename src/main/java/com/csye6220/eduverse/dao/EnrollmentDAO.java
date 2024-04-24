@@ -34,11 +34,25 @@ public class EnrollmentDAO extends DAO {
         return count != 0;
     }
 
-    public List<Enrollment> getEnrollmentsByCourseOfferingId(Long courseOfferingId) {
+    public boolean checkCurrentCourseEnrollmentByEmail(Long courseOfferingId, String email) {
+        begin();
+        String hql = "SELECT COUNT(e) FROM Enrollment e WHERE e.courseOffering.id = :courseOfferingId AND e.student.user.email = :email";
+        Query<Long> query = getSession().createQuery(hql, Long.class);
+        query.setParameter("courseOfferingId", courseOfferingId);
+        query.setParameter("email", email);
+
+        Long count = query.getSingleResult();
+        close();
+        return count != 0;
+    }
+
+    public List<Enrollment> getEnrollmentsByCourseOfferingId(Long courseOfferingId, int offset) {
         begin();
         String hql = "FROM Enrollment e WHERE e.courseOffering.id = :courseOfferingId";
         Query<Enrollment> query = getSession().createQuery(hql, Enrollment.class);
         query.setParameter("courseOfferingId", courseOfferingId);
+        query.setFirstResult(offset); // Offset for additional batch (starting from a specified index)
+        query.setMaxResults(20);
         List<Enrollment> enrollments = query.list();
         System.out.println(enrollments);
         close();

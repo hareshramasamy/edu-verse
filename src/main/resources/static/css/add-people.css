@@ -22,6 +22,19 @@
     flex: 6;
     padding: 20px;
     overflow: hidden;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 50px;
+    align-items: center;
+    justify-content: center;
+}
+
+.people-main-content div {
+    max-width: 350px;
+}
+
+.people-main-content h1 {
+    font-size: x-large;
 }
 
 h2 {
@@ -30,7 +43,7 @@ h2 {
 }
 
 form {
-    width: 50%;
+    width: 100%;
 }
 
 label {

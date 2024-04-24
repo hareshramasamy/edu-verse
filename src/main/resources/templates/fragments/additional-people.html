@@ -1,0 +1,11 @@
+<tr th:each="student : ${additionalStudents}">
+    <td>
+        <p th:text="${student.user.firstName + ' ' + student.user.lastName}"></p>
+    </td>
+    <td>
+        <p th:text="${student.user.email}"></p>
+    </td>
+    <td>
+        <p th:text="Student"></p>
+    </td>
+</tr>

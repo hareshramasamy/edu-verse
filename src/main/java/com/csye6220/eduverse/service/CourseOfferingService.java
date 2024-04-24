@@ -2,9 +2,8 @@ package com.csye6220.eduverse.service;
 
 import com.csye6220.eduverse.entity.CourseOffering;
 import com.csye6220.eduverse.entity.Student;
-import com.csye6220.eduverse.pojo.CourseDTO;
-import com.csye6220.eduverse.pojo.CourseOfferingDTO;
-import com.csye6220.eduverse.pojo.UserDTO;
+import com.csye6220.eduverse.pojo.*;
+import org.springframework.validation.BindingResult;
 
 import java.util.List;
 
@@ -21,10 +20,12 @@ public interface CourseOfferingService {
 
     CourseOfferingDTO mapCourseOfferingToDTO(CourseOffering courseOffering);
 
-    List<Student> getEnrolledStudents(Long courseOfferingId);
+    List<Student> getEnrolledStudents(Long courseOfferingId, int offset);
     boolean checkCourseOfferingExists(Long courseOfferingId);
 
     CourseOfferingDTO getCourseOfferingDTOById(Long courseOfferingId);
 
     void enrollStudentsToCourse(Long courseOfferingId, List<String> emailList);
+
+    void uploadExcelFile(ExcelUploadValues excelUploadValues, Long courseOfferingId, BindingResult result);
 }
