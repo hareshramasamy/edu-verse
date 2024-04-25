@@ -89,7 +89,7 @@ public class StudentAssignmentController {
     }
 
     @GetMapping("/courses/{courseOfferingId}/assignments/download/{studentAssignmentId}")
-    public ResponseEntity<Resource> downloadStudentAssignment(@PathVariable Long studentAssignmentId, @PathVariable Long courseOfferingId, HttpHeaders headers) {
+    public ResponseEntity<Resource> downloadStudentAssignment(@PathVariable Long studentAssignmentId, @PathVariable Long courseOfferingId) {
         if(!courseOfferingService.checkCourseOfferingExists(courseOfferingId)) {
             return ResponseEntity.notFound().build();
         }
@@ -100,6 +100,7 @@ public class StudentAssignmentController {
         if(studentAssignment == null) {
             return ResponseEntity.notFound().build();
         }
+        HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + studentAssignment.getFileName());
 
         return ResponseEntity.ok()

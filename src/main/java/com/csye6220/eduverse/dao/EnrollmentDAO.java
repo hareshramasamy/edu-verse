@@ -65,5 +65,17 @@ public class EnrollmentDAO extends DAO {
         commit();
         close();
     }
+
+    public List<Student> getStudentsByAssignmentId(Long assignmentId) {
+        begin();
+        String hql = "SELECT e.student FROM Enrollment e WHERE e.courseOffering.id = (SELECT a.courseOffering.id FROM Assignment a where a.id = :assignmentId)";
+        Query<Student> query = getSession().createQuery(hql, Student.class);
+        query.setParameter("assignmentId", assignmentId);
+        List<Student> students = query.list();
+        System.out.println(students);
+        close();
+        return students;
+
+    }
 }
 

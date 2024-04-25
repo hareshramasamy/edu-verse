@@ -109,6 +109,7 @@
                                 <th>Due</th>
                                 <th>Submitted</th>
                                 <th>Score out of 100</th>
+                                <th>Comments</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -124,6 +125,12 @@
                                 </td>
                                 <td th:if="${gradesMap.containsKey(assignment.id)}">
                                     <p th:text="${gradesMap.get(assignment.id).score}"></p>
+                                </td>
+                                <td th:if="${gradesMap.containsKey(assignment.id)}">
+                                    <p th:text="${gradesMap.get(assignment.id).comment}"></p>
+                                </td>
+                                <td th:unless="${gradesMap.containsKey(assignment.id)}">
+                                    <p>-</p>
                                 </td>
                                 <td th:unless="${gradesMap.containsKey(assignment.id)}">
                                     <p>-</p>

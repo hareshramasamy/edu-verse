@@ -1,13 +1,7 @@
 package com.csye6220.eduverse.service;
 
-import com.csye6220.eduverse.dao.AssignmentDAO;
-import com.csye6220.eduverse.dao.EnrollmentDAO;
-import com.csye6220.eduverse.dao.GradeDAO;
-import com.csye6220.eduverse.dao.StudentDAO;
-import com.csye6220.eduverse.entity.Assignment;
-import com.csye6220.eduverse.entity.Enrollment;
-import com.csye6220.eduverse.entity.Grade;
-import com.csye6220.eduverse.entity.Student;
+import com.csye6220.eduverse.dao.*;
+import com.csye6220.eduverse.entity.*;
 import com.csye6220.eduverse.mapper.GradeMapper;
 import com.csye6220.eduverse.pojo.AssignmentDTO;
 import com.csye6220.eduverse.pojo.GradeDTO;
@@ -27,14 +21,26 @@ public class GradeServiceImpl implements GradeService {
 
     GradeDAO gradeDAO;
 
+    StudentAssignmentDAO studentAssignmentDAO;
+
     @Autowired
-    public GradeServiceImpl(GradeMapper gradeMapper, GradeDAO gradeDAO) {
+    public GradeServiceImpl(GradeMapper gradeMapper, GradeDAO gradeDAO, StudentAssignmentDAO studentAssignmentDAO) {
         this.gradeMapper = gradeMapper;
         this.gradeDAO = gradeDAO;
+        this.studentAssignmentDAO = studentAssignmentDAO;
     }
 
     @Override
     public void gradeSubmission(GradeDTO gradeDTO) {
+//        Assignment assignment = studentAssignmentDAO.getStudentAssignmentByid(gradeDTO.getStudentAssignmentId()).getAssignment();
+//        List<StudentAssignment> studentAssignments = studentAssignmentDAO.getStudentAssignmentsByAssignmentId(assignment.getId());
+//        for(StudentAssignment studentAssignment: studentAssignments) {
+//            Grade grade = new Grade();
+//            grade.setScore(gradeDTO.getScore());
+//            grade.setComment(gradeDTO.getComment());
+//            grade.setStudentAssignment(studentAssignment);
+//            gradeDAO.createSubmission(grade);
+//        }
         Grade grade = gradeMapper.mapDTOToGrade(gradeDTO);
         gradeDAO.createSubmission(grade);
     }
