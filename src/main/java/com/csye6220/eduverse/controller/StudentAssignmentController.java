@@ -47,7 +47,7 @@ public class StudentAssignmentController {
     }
 
     @GetMapping("/courses/{courseOfferingId}/assignments/{assignmentId}/start-assignment")
-    public String startAssignmentById(@PathVariable Long courseOfferingId, @PathVariable Long assignmentId, Model model) {
+    public String startAssignmentById(@PathVariable Long courseOfferingId, @PathVariable Long assignmentId, Model model, StudentAssignmentDTO studentAssignmentDTO) {
         Authentication authentication = SecurityUtil.getSessionUser();
         if(Objects.nonNull(authentication)) {
             if(!courseOfferingService.checkCourseOfferingExists(courseOfferingId)) {
@@ -60,7 +60,7 @@ public class StudentAssignmentController {
             model.addAttribute("course", courseOfferingService.getCourseOfferingDTOById(courseOfferingId));
             model.addAttribute("userFullName", userDTO.getFirstName() + " " + userDTO.getLastName());
             model.addAttribute("activeTab", "courses");
-            model.addAttribute("studentAssignment", new StudentAssignmentDTO());
+            model.addAttribute("studentAssignment", studentAssignmentDTO);
             model.addAttribute("assignmentId", assignmentId);
             model.addAttribute("courseOfferingId", courseOfferingId);
         }
@@ -89,7 +89,7 @@ public class StudentAssignmentController {
     }
 
     @GetMapping("/courses/{courseOfferingId}/assignments/download/{studentAssignmentId}")
-    public ResponseEntity<Resource> downloadStudentAssignment(@PathVariable Long studentAssignmentId, @PathVariable Long courseOfferingId) {
+    public ResponseEntity<Resource> downloadStudentAssignment(@PathVariable Long studentAssignmentId, @PathVariable Long courseOfferingId, HttpHeaders headers) {
         if(!courseOfferingService.checkCourseOfferingExists(courseOfferingId)) {
             return ResponseEntity.notFound().build();
         }
@@ -100,7 +100,6 @@ public class StudentAssignmentController {
         if(studentAssignment == null) {
             return ResponseEntity.notFound().build();
         }
-        HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + studentAssignment.getFileName());
 
         return ResponseEntity.ok()

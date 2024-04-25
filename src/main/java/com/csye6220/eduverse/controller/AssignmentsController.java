@@ -62,7 +62,7 @@ public class AssignmentsController {
 
 
     @GetMapping("/courses/{courseOfferingId}/assignments/create")
-    public String createAssignmentPage(@PathVariable Long courseOfferingId, Model model) {
+    public String createAssignmentPage(@PathVariable Long courseOfferingId, AssignmentDTO assignmentDTO, Model model) {
         Authentication authentication = SecurityUtil.getSessionUser();
         if(Objects.nonNull(authentication)) {
             if(!courseOfferingService.checkCourseOfferingExists(courseOfferingId)) {
@@ -76,7 +76,7 @@ public class AssignmentsController {
             model.addAttribute("activeTab", "courses");
             model.addAttribute("course", courseOfferingService.getCourseOfferingDTOById(courseOfferingId));
         }
-        model.addAttribute("assignment", new AssignmentDTO());
+        model.addAttribute("assignment", assignmentDTO);
         model.addAttribute("courseOfferingId", courseOfferingId);
         return "create-assignment";
     }

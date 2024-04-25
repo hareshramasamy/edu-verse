@@ -1,7 +1,11 @@
 package com.csye6220.eduverse.service;
 
 import com.csye6220.eduverse.dao.AssignmentDAO;
+import com.csye6220.eduverse.dao.GradeDAO;
+import com.csye6220.eduverse.dao.StudentAssignmentDAO;
 import com.csye6220.eduverse.entity.Assignment;
+import com.csye6220.eduverse.entity.Grade;
+import com.csye6220.eduverse.entity.StudentAssignment;
 import com.csye6220.eduverse.mapper.AssignmentMapper;
 import com.csye6220.eduverse.pojo.AssignmentDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +18,16 @@ import java.util.List;
 public class AssignmentsServiceImpl implements AssignmentsService {
 
     private final AssignmentDAO assignmentDAO;
+    private final StudentAssignmentDAO studentAssignmentDAO;
+    private final GradeDAO gradeDAO;
     private final AssignmentMapper assignmentMapper;
 
     @Autowired
-    public AssignmentsServiceImpl(AssignmentDAO assignmentDAO, AssignmentMapper assignmentMapper) {
+    public AssignmentsServiceImpl(AssignmentDAO assignmentDAO, AssignmentMapper assignmentMapper, StudentAssignmentDAO studentAssignmentDAO, GradeDAO gradeDAO) {
         this.assignmentDAO = assignmentDAO;
         this.assignmentMapper = assignmentMapper;
+        this.studentAssignmentDAO = studentAssignmentDAO;
+        this.gradeDAO = gradeDAO;
     }
 
     @Override
@@ -59,6 +67,10 @@ public class AssignmentsServiceImpl implements AssignmentsService {
     @Override
     public void deleteAssignmentById(Long assignmentId) {
         Assignment assignment = assignmentDAO.getAssignmentById(assignmentId);
+        List<StudentAssignment> studentAssignments = studentAssignmentDAO.getStudentAssignmentsByAssignmentId(assignmentId);
+        List<Grade> grades = gradeDAO.getGradesByAssignmentId(assignmentId);
+        grades.forEach(gradeDAO::deleteGrade);
+        studentAssignments.forEach(studentAssignmentDAO::deleteStudentAssignment);
         assignmentDAO.deleteAssignment(assignment);
     }
 }

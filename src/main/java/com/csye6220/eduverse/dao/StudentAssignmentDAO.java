@@ -57,4 +57,11 @@ public class StudentAssignmentDAO extends DAO{
         return studentAssignment;
 
     }
+
+    public void deleteStudentAssignment(StudentAssignment studentAssignment) {
+        begin();
+        getSession().remove(studentAssignment);
+        commit();
+        close();
+    }
 }

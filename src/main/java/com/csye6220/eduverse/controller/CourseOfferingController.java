@@ -51,7 +51,7 @@ public class CourseOfferingController {
     }
 
     @GetMapping("/courses/create")
-    public String createNewCourseOffering(Model model) throws Exception {
+    public String createNewCourseOffering(Model model, CourseOfferingDTO courseOfferingDTO) throws Exception {
         Authentication authentication = SecurityUtil.getSessionUser();
         if(Objects.nonNull(authentication)) {
             List<CourseDTO> courseDTOList = courseOfferingService.getAllCourses(authentication.getName());
@@ -60,7 +60,7 @@ public class CourseOfferingController {
             model.addAttribute("userFullName", userDTO.getFirstName() + " " + userDTO.getLastName());
             model.addAttribute("activeTab", "courses");
         }
-        model.addAttribute("courseOffering", new CourseOfferingDTO());
+        model.addAttribute("courseOffering", courseOfferingDTO);
         return "create-new-course";
     }
 
@@ -121,7 +121,7 @@ public class CourseOfferingController {
 
 
     @GetMapping("/courses/{courseOfferingId}/people/add")
-    public String addPeopleToCourse(@PathVariable Long courseOfferingId, Model model) {
+    public String addPeopleToCourse(@PathVariable Long courseOfferingId, PersonDTO personDTO, ExcelUploadValues excelUploadValues, Model model) {
         Authentication authentication = SecurityUtil.getSessionUser();
         if(Objects.nonNull(authentication)) {
             if (!courseOfferingService.checkCourseOfferingExists(courseOfferingId)) {
@@ -132,8 +132,8 @@ public class CourseOfferingController {
             }
             UserDTO userDTO = userService.searchByUserName(authentication.getName());
             model.addAttribute("course", courseOfferingService.getCourseOfferingDTOById(courseOfferingId));
-            model.addAttribute("person", new PersonDTO());
-            model.addAttribute("file", new ExcelUploadValues());
+            model.addAttribute("person", personDTO);
+            model.addAttribute("file", excelUploadValues);
             model.addAttribute("userFullName", userDTO.getFirstName() + " " + userDTO.getLastName());
             model.addAttribute("activeTab", "courses");
         }
@@ -141,11 +141,11 @@ public class CourseOfferingController {
     }
 
     @PostMapping("/courses/{courseOfferingId}/people/add")
-    public String addSinglePersonToCourse(@PathVariable Long courseOfferingId, @Valid @ModelAttribute("person") PersonDTO personDTO, BindingResult result, Model model) {
+    public String addSinglePersonToCourse(@PathVariable Long courseOfferingId, @Valid @ModelAttribute("person") PersonDTO personDTO, BindingResult result, Model model, ExcelUploadValues excelUploadValues) {
         Authentication authentication = SecurityUtil.getSessionUser();
         if (result.hasErrors()) {
             model.addAttribute("person", personDTO);
-            model.addAttribute("file", new ExcelUploadValues());
+            model.addAttribute("file", excelUploadValues);
             if (Objects.nonNull(authentication)) {
                 UserDTO userDTO = userService.searchByUserName(authentication.getName());
                 model.addAttribute("userFullName", userDTO.getFirstName() + " " + userDTO.getLastName());
@@ -173,13 +173,13 @@ public class CourseOfferingController {
     }
 
     @PostMapping("/courses/{courseOfferingId}/people/upload-excel")
-    public String addPeopleByUpload(@PathVariable Long courseOfferingId,  @Valid @ModelAttribute("file") ExcelUploadValues excelUploadValues, BindingResult result, Model model) {
+    public String addPeopleByUpload(@PathVariable Long courseOfferingId,  @Valid @ModelAttribute("file") ExcelUploadValues excelUploadValues, BindingResult result, Model model, PersonDTO personDTO) {
         Authentication authentication = SecurityUtil.getSessionUser();
         if(Objects.nonNull(authentication)) {
             courseOfferingService.uploadExcelFile(excelUploadValues, courseOfferingId, result);
         }
         if (result.hasErrors()) {
-            model.addAttribute("person", new PersonDTO());
+            model.addAttribute("person",personDTO);
             model.addAttribute("file", excelUploadValues);
             if (Objects.nonNull(authentication)) {
                 UserDTO userDTO = userService.searchByUserName(authentication.getName());

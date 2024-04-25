@@ -11,6 +11,7 @@ public class FileData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Lob
     @Column(columnDefinition = "MEDIUMBLOB")
     private byte[] data;

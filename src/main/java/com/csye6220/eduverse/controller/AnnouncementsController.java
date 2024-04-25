@@ -57,7 +57,7 @@ public class AnnouncementsController {
     }
 
     @GetMapping("/courses/{courseOfferingId}/announcements/create")
-    public String createAnnouncementPage(@PathVariable Long courseOfferingId, Model model) {
+    public String createAnnouncementPage(@PathVariable Long courseOfferingId, AnnouncementDTO announcementDTO, Model model) {
         Authentication authentication = SecurityUtil.getSessionUser();
         if(Objects.nonNull(authentication)) {
             if(!courseOfferingService.checkCourseOfferingExists(courseOfferingId)) {
@@ -71,7 +71,7 @@ public class AnnouncementsController {
             model.addAttribute("activeTab", "courses");
             model.addAttribute("course", courseOfferingService.getCourseOfferingDTOById(courseOfferingId));
         }
-        model.addAttribute("announcement", new AnnouncementDTO());
+        model.addAttribute("announcement", announcementDTO);
         model.addAttribute("courseOfferingId", courseOfferingId);
         return "create-announcement";
     }

@@ -63,7 +63,7 @@ public class GradesController {
     }
 
     @GetMapping("/courses/{courseOfferingId}/grade/{studentAssignmentId}")
-    public String gradeSubmissionByStudentAssignmentId(@PathVariable Long courseOfferingId, @PathVariable Long studentAssignmentId, Model model) {
+    public String gradeSubmissionByStudentAssignmentId(@PathVariable Long courseOfferingId, @PathVariable Long studentAssignmentId, Model model, GradeDTO gradeDTO) {
         Authentication authentication = SecurityUtil.getSessionUser();
         if(Objects.nonNull(authentication)) {
             if (!courseOfferingService.checkCourseOfferingExists(courseOfferingId)) {
@@ -80,7 +80,7 @@ public class GradesController {
             UserDTO userDTO = userService.searchByUserName(authentication.getName());
             model.addAttribute("course", courseOfferingService.getCourseOfferingDTOById(courseOfferingId));
             model.addAttribute("studentAssignment", studentAssignmentDTO);
-            model.addAttribute("grade", new GradeDTO());
+            model.addAttribute("grade", gradeDTO);
             model.addAttribute("userFullName", userDTO.getFirstName() + " " + userDTO.getLastName());
             model.addAttribute("activeTab", "courses");
         }

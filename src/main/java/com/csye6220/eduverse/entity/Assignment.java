@@ -14,6 +14,7 @@ public class Assignment {
 
     private String name;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
     @Column(name = "start_date")
     private LocalDateTime startDate;

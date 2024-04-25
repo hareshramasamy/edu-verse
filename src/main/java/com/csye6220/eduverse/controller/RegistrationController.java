@@ -42,7 +42,7 @@ public class RegistrationController {
     }
 
     @GetMapping("/register")
-    public String showRegistrationForm(Model model) {
+    public String showRegistrationForm(Model model, RegistrationDTO registrationDTO) {
         Authentication authentication = SecurityUtil.getSessionUser();
 
         if(Objects.nonNull(authentication) && authentication.getAuthorities().stream().anyMatch(grantedAuthority -> Arrays.asList("ROLE_STUDENT", "ROLE_INSTRUCTOR").contains(grantedAuthority.getAuthority()))) {
@@ -51,7 +51,7 @@ public class RegistrationController {
 
         List<DepartmentDTO> departmentList = departmentService.getAllDepartments();
         model.addAttribute("departmentList", departmentList);
-        model.addAttribute("registrationDTO", new RegistrationDTO());
+        model.addAttribute("registrationDTO", registrationDTO);
         return "register";
     }
 
@@ -74,8 +74,7 @@ public class RegistrationController {
      */
     @PostMapping("/register-users")
     @ResponseBody
-    public String processRegistrationForm(@RequestBody List<TestRegistrationDTO> registrationDTOList) {
-        StringBuilder response = new StringBuilder();
+    public String processRegistrationForm(@RequestBody List<TestRegistrationDTO> registrationDTOList, StringBuilder response) {
         for(TestRegistrationDTO registrationDTO : registrationDTOList) {
             registrationService.registerUserTest(registrationDTO);
             response.append("User registered successfully: ").append(registrationDTO.getUsername()).append("\n");

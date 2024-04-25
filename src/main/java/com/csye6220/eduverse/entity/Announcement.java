@@ -18,6 +18,7 @@ public class Announcement {
 
     private String title;
 
+    @Column(columnDefinition = "TEXT")
     private String content;
 
     @Column(name = "date_time")

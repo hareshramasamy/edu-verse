@@ -68,7 +68,7 @@ public class FilesController {
     }
 
     @GetMapping("/courses/{courseOfferingId}/files/upload")
-    public String uploadFilePage(@PathVariable Long courseOfferingId, Model model) {
+    public String uploadFilePage(@PathVariable Long courseOfferingId, Model model, FileDTO fileDTO) {
         Authentication authentication = SecurityUtil.getSessionUser();
         if(Objects.nonNull(authentication)) {
             if(!courseOfferingService.checkCourseOfferingExists(courseOfferingId)) {
@@ -82,7 +82,7 @@ public class FilesController {
             model.addAttribute("activeTab", "courses");
             model.addAttribute("course", courseOfferingService.getCourseOfferingDTOById(courseOfferingId));
         }
-        model.addAttribute("file", new FileDTO());
+        model.addAttribute("file", fileDTO);
         model.addAttribute("courseOfferingId", courseOfferingId);
         return "file-upload";
     }
@@ -109,7 +109,7 @@ public class FilesController {
 
 
     @GetMapping("/courses/{courseOfferingId}/files/{fileId}")
-    public ResponseEntity<Resource> downloadFile(@PathVariable Long fileId, @PathVariable Long courseOfferingId) {
+    public ResponseEntity<Resource> downloadFile(@PathVariable Long fileId, @PathVariable Long courseOfferingId, HttpHeaders headers) {
         if(!courseOfferingService.checkCourseOfferingExists(courseOfferingId)) {
             return ResponseEntity.notFound().build();
         }
@@ -120,7 +120,6 @@ public class FilesController {
         if(file == null) {
             return ResponseEntity.notFound().build();
         }
-        HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + file.getFileName());
 
         return ResponseEntity.ok()

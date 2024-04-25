@@ -40,4 +40,22 @@ public class GradeDAO extends DAO {
         close();
         return grade;
     }
+
+    public List<Grade> getGradesByAssignmentId(Long assignmentId) {
+        begin();
+        String hql = "FROM Grade g WHERE g.studentAssignment.assignment.id = :assignmentId";
+        Query<Grade> query = getSession().createQuery(hql, Grade.class);
+        query.setParameter("assignmentId", assignmentId);
+        List<Grade> grade = query.list();
+        System.out.println(grade);
+        close();
+        return grade;
+    }
+
+    public void deleteGrade(Grade grade) {
+        begin();
+        getSession().remove(grade);
+        commit();
+        close();
+    }
 }
