@@ -11,7 +11,7 @@
 	<groupId>com.csye6220</groupId>
 	<artifactId>edu-verse</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>edu-verse</name>
 	<description>Online LMS platform</description>
 	<properties>
@@ -41,11 +41,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-tomcat</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
@@ -53,11 +48,6 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.tomcat</groupId>
-			<artifactId>tomcat-jasper</artifactId>
-			<version>10.1.19</version>
 		</dependency>
 		<dependency>
 			<groupId>jakarta.persistence</groupId>
@@ -86,6 +76,7 @@
 		</dependency>
 	</dependencies>
 	<build>
+		<finalName>edu-verse</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
